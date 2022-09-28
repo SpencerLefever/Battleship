@@ -1,14 +1,25 @@
 // Fig. 24.6: ServerTest.java
 // Test the Server application.
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import javax.swing.JFrame;
 
 public class ServerTest
 {
    public static void main( String args[] )
    {
+      try {
+         InetAddress ip = InetAddress.getLocalHost();
+         System.out.println(ip);
+      } catch (UnknownHostException e) {
+         e.printStackTrace();
+      }
+      
       Server application = new Server(); // create server
       application.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
       application.runServer(); // run server application
+
    } // end main
 } // end class ServerTest
 
