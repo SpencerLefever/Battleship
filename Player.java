@@ -23,11 +23,11 @@
     final int NUM_SHIPS = 5;
 
     //Create ocean and target grid objects
-    boolean winStatus;
+    private boolean winStatus;
 
-    TargetGrid targetGrid;
-    OceanGrid oceanGrid;
-    Grid shipGrid;
+    private TargetGrid targetGrid;
+    private OceanGrid oceanGrid;
+    private Grid shipGrid;
 
     public Player(TargetGrid t, OceanGrid o, Grid s, boolean w) {
         targetGrid = t;
@@ -104,6 +104,7 @@
             } while(checkOverlap(shipGrid.getGrid(),sArr[i]));
 
             //Update ship array to true values for ship
+            setShip(shipGrid.getGrid(), sArr[i]);
         }
     }
 
@@ -135,6 +136,24 @@
         }
         return false;
 
+    }
+
+    /**
+     * Method to set a new ship onto 
+     * the ship grid used in setGrid method
+     */
+
+    public void setShip(boolean[][] sGrid, Ship ship) {
+        //Evaluated to true if ship is vertical
+        if(ship.getOrientation()) {
+            for(int i=0; i<ship.getSize(); i++) {
+                sGrid[ship.getxLocation()][(ship.getyLocation())+i] = true;
+            }
+        } else {
+            for(int i=0; i<ship.getSize(); i++) {
+                sGrid[(ship.getxLocation())+i][ship.getyLocation()] = true;
+            }
+        }
     }
 
 
