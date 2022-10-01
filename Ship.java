@@ -1,15 +1,30 @@
+/**
+ * 
+ * Ship class conventions
+ * 
+ * status variable : 
+ * 	false=ship is not sunk
+ * 	true=ship has been sunk
+ * 
+ * orientation variable :
+ *  true=ship is oriented vertically
+ * 	false=ship is oriented horizontally;
+ */
+
 public class Ship {
 	private int size;
 	private String name;
 	private boolean status;
-	private int[][] location;
+	private int xLocation;
+	private int yLocation;
 	private boolean orientation;
 	
-	public Ship(int s, String n, boolean st, int[][] l, boolean o) {
+	public Ship(int s, String n, boolean st, int xL, int yL, boolean o) {
 		size = s;
 		name = n;
 		status = st;
-		location = l;
+		xLocation = xL;
+		yLocation = yL;
 		orientation = o;
 	}
 	
@@ -37,13 +52,22 @@ public class Ship {
 		return status;
 	}
 	
-	public void setLocation(int[][] l){
-		location = l;
+	public void setxLocation(int xL){
+		xLocation = xL;
 	}
 	
-	public int[][] getLocation(){
-		return location;
+	public int getxLocation(){
+		return xLocation;
 	}
+
+	public void setyLocation(int yL){
+		yLocation = yL;
+	}
+	
+	public int getyLocation(){
+		return yLocation;
+	}
+	
 	
 	public void setOrientation(boolean o) {
 		orientation = o;
