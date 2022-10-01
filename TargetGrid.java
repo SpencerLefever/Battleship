@@ -28,4 +28,14 @@
     public void setShot(Shot s) {
         shot = s;
     }
+
+    //Getter and setter for a single cell in the grid
+    public void setCell(int x, int y, boolean isHit) {
+        boolean[][] grid = this.getGrid();
+
+        grid[x][y] = isHit;
+
+        this.setGrid(grid);
+
+    }
  }

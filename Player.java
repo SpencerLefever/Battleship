@@ -61,18 +61,18 @@
      * the shot is a hit or miss
      */
 
-    public void fireShot(Shot s) {
-       
-    }
+    public void fireShot(boolean[][] sGrid, Shot s) {
+       int x = s.getxCoordinate();
+       int y = s.getyCoordinate();
 
-    /** 
-     * Method for a player to check if 
-     * a shot fired by the other player
-     * is a hit or a miss
-     */
-
-    public void checkShot() {
-
+       //Evaluates to true is shot is a hit
+       if(sGrid[x][y]) {
+            //Update players target grid to reflect shot
+            this.targetGrid.setCell(x,y,true);
+       } else {
+            //Update players target grid to reflect shot
+            this.targetGrid.setCell(x,y,false);
+       }
     }
 
     /** 
@@ -89,7 +89,7 @@
 
         for(int i=0; i<NUM_SHIPS; i++){            
         
-            Ship[] sArr = oceanGrid.getShipArr();
+            Ship[] sArr = this.oceanGrid.getShipArr();
 
             do
             {

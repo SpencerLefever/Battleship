@@ -18,7 +18,7 @@
     private int length;
     private int width;
 
-    boolean[][] grid;
+    private boolean[][] grid;
     
     public Grid(int l, int w, boolean[][] g) {
         length = l;
@@ -50,9 +50,19 @@
         width = w;
     }
 
-    //Grid arr getter
+    //Grid arr getter and setter
     public boolean[][] getGrid() {
         return grid;
     }
+
+    //This is used to set changes in the grid after a shot
+    public void setGrid(boolean[][] g) {
+        for(int i=0; i<length; i++) {
+            for(int j=0; j<width; j++) {
+                this.grid[i][j] = g[i][j];
+            }
+        }
+    }
+
 
  }
