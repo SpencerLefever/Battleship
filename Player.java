@@ -113,8 +113,9 @@
      */
     public boolean checkOverlap(boolean[][] sGrid, Ship ship) {
         int size = ship.getSize();
-        int x = ship.getxLocation();
-        int y = ship.getyLocation();
+        //Get coordinate and subtract one for array index
+        int x = (ship.getxLocation())-1;
+        int y = (ship.getyLocation()) -1;
         //Check grid when ship is vertical
         if(ship.getOrientation()) {
             for(int i=0; i<size; i++) {
