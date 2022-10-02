@@ -8,7 +8,7 @@
  * 
  * orientation variable :
  *  true=ship is oriented vertically
- * 	false=ship is oriented horizontally;
+ * 	false=ship is oriented horizontally
  */
 
 public class Ship {

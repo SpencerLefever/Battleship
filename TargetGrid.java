@@ -12,12 +12,14 @@
 
  public class TargetGrid extends Grid {
     
-    private Shot shot;
+    private Shot shot = new Shot(0, 0);
 
-    public TargetGrid(int l, int w, boolean[][] g, Shot s) {
-        super(l,w,g);
+    public TargetGrid(int l, int w) {
+        super(l,w);
+    }
 
-        shot = s;
+    TargetGrid(TargetGrid t) {
+        super(t);
     }
 
     //Shot getter and setter
@@ -29,8 +31,8 @@
         shot = s;
     }
 
-    //Getter and setter for a single cell in the grid
-    public void setCell(int x, int y, boolean isHit) {
+    //Set a single shot on the grid overriding the standard setter needed
+    public void setShot(int x, int y, boolean isHit) {
         boolean[][] grid = this.getGrid();
 
         grid[x][y] = isHit;

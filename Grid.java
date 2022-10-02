@@ -20,14 +20,24 @@
 
     private boolean[][] grid;
     
-    public Grid(int l, int w, boolean[][] g) {
+    public Grid(int l, int w) {
         length = l;
         width = w;
-        boolean[][] grid = new boolean[l][w];
+        grid = new boolean[l][w];
         //Set all grid values to false
         for(int i=0; i<l; i++) {
             for(int j=0; j<w; j++) {
-                grid[l][w] = false;
+                grid[i][j] = false;
+            }
+        }
+    }
+    
+    Grid(Grid g) {
+        this.length = g.length;
+        this.width = g.width;
+        for(int i=0; i<g.length; i++) {
+            for(int j=0; j<g.width; j++) {
+                this.grid[i][j] = g.grid[i][j];
             }
         }
     }
@@ -61,6 +71,35 @@
             for(int j=0; j<width; j++) {
                 this.grid[i][j] = g[i][j];
             }
+        }
+    }
+
+    //Getter and setter for a single cell in the grid
+    public void setCell(int x, int y, boolean isHit) {
+        grid[x][y] = isHit;
+    }
+
+    /**
+     * Method to get a single cell from the grid
+     */
+    public boolean getCell(int x, int y) {
+        return grid[x][y];
+    }
+
+    public void printGrid() {
+        for(int i=0; i< length; i++) {
+            for(int j=0; j<width; j++) {
+
+                //System.out.print(grid[i][j]);
+                if(grid[i][j]) {
+                    System.out.print("x");
+                }
+                else {
+                    System.out.print("o");
+                }
+
+            }
+            System.out.println();
         }
     }
 
