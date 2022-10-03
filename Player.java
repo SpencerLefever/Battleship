@@ -112,6 +112,11 @@
        int x = s.getxCoordinate();
        int y = s.getyCoordinate();
 
+       //Return if shot is a repeat shot
+       if(targetGrid.getCell(x, y)) {
+            return;
+       }
+
        //Evaluates to true is shot is a hit
        if(sGrid.getCell(x, y)) {
             //Update players target grid to reflect shot
@@ -119,7 +124,10 @@
             oGrid.setCell(x, y, true);
        } else {
             //Update players target grid to reflect shot
-            targetGrid.setCell(x,y,false);
+            //This block will only update the target grid to 
+            //reflect a shot fired and will not update the
+            //ocean grid to reflect a shot hit
+            targetGrid.setCell(x,y,true);
        }
     }
 
