@@ -38,11 +38,28 @@
 
             player2.fireShot(player1.getShipGrid(), player1.getOceanGrid(), player2Shot);
 
-            Grid oceanGrid1 = player1.getTargetGrid();
-            System.out.println("Player 1 Ocean Grid");
-            oceanGrid1.printGrid();
-
         }while(player1.isLoser(player1.getTargetGrid()) && player2.isLoser(player2.getTargetGrid()));
-    }
+    
+        Grid targetGrid1 = player1.getTargetGrid();
+        Grid shipGrid1 = player1.getShipGrid();
+        
+        Grid targetGrid2 = player2.getTargetGrid();
+        Grid shipGrid2 = player2.getShipGrid();
 
+        if(player1.isLoser(player1.getTargetGrid())) {
+            System.out.println("Player 1 lost");
+            System.out.println("Player 1 Target Grid");
+            targetGrid1.printGrid();
+            System.out.println("\nPlayer 2 Ship Grid");
+            shipGrid2.printGrid();
+        }
+        if(player2.isLoser(player2.getTargetGrid())) {
+            System.out.println("Player 2 lost");
+            System.out.println("Player 2 Target Grid");
+            targetGrid2.printGrid();
+            System.out.println("\nPlayer 1 Ship Grid");
+            shipGrid1.printGrid();
+
+        }
+    }
  }
