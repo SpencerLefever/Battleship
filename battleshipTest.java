@@ -20,10 +20,6 @@
         Player player1 = new Player(GRID_LENGTH, GRID_WIDTH);
         Player player2 = new Player(GRID_LENGTH, GRID_WIDTH);
 
-        Grid oceanGrid1 = player1.getOceanGrid();
-            
-        Grid targetGrid2 = player2.getTargetGrid();
-            
 
         //Set grids
         player1.setGridRand();
@@ -43,25 +39,34 @@
 
             player2.fireShot(player1.getShipGrid(), player1.getOceanGrid(), player2Shot);
 
-            if(count==4) {
-                //Print player 2 target grid for testing
-                System.out.println("Player 1 Ocean Grid");
-                oceanGrid1.printGrid();
-                System.out.println();
+        }while(player1.isWinner(player1.getTargetGrid()) && player2.isWinner(player2.getTargetGrid()));
     
-                //Print player 1 target grid for testing
-                System.out.println("Player 2 Target Grid");
-                targetGrid2.printGrid();
-                System.out.println();
-            }
-            count++;
+        Grid targetGrid1 = player1.getTargetGrid();
+        Grid shipGrid1 = player1.getShipGrid();
+        Grid oceanGrid1 = player1.getOceanGrid();
+        
+        Grid targetGrid2 = player2.getTargetGrid();
+        Grid shipGrid2 = player2.getShipGrid();
+        Grid oceanGrid2 = player2.getOceanGrid();
 
-        }while(!player1.isWinner(player1.getTargetGrid()) && !player2.isWinner(player2.getTargetGrid()));
-        System.out.println("Count: " + count);
-
-        if(player1.isWinner(player1.getTargetGrid())) { 
+        if(player1.isWinner(player1.getTargetGrid())) {
+            System.out.println("Player 1 lost");
+            System.out.println("Player 1 Ocean Grid");
+            oceanGrid1.printGrid();
+            System.out.println("\nPlayer 1 Target Grid");
+            targetGrid1.printGrid();
+            System.out.println("\nPlayer 2 Ship Grid");
+            shipGrid2.printGrid();
+        }
+        if(player2.isWinner(player2.getTargetGrid())) {
+            System.out.println("Player 2 lost");
+            System.out.println("Player 2 Ocean Grid");
+            oceanGrid2.printGrid();
+            System.out.println("\nPlayer 2 Target Grid");
+            targetGrid2.printGrid();
+            System.out.println("\nPlayer 1 Ship Grid");
+            shipGrid1.printGrid();
 
         }
     }
-
  }

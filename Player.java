@@ -85,11 +85,11 @@
      */
     public boolean isWinner(Grid tGrid) {
         int numHits = 0;
-        boolean[][] grid = tGrid.getGrid();
+        int[][] grid = tGrid.getGrid();
 
         for(int i=0; i<tGrid.getLength(); i++) {
             for(int j=0; j<tGrid.getWidth(); j++) {
-                if(grid[i][j]) {
+                if(grid[i][j] == 1) {
                     numHits++;
                 }
             }
@@ -116,15 +116,24 @@
        int x = s.getxCoordinate();
        int y = s.getyCoordinate();
 
+       //Return if shot is a repeat shot
+       if(oGrid.getCell(x, y) == 0 || oGrid.getCell(x, y) == 1) {
+            return;
+       }
+
        //Evaluates to true is shot is a hit
-       if(sGrid.getCell(x, y)) {
+       if(sGrid.getCell(x, y) == 1) {
             //Update players target grid to reflect shot
-            targetGrid.setCell(x,y,true);
-            //Update opponents ocean grid;
-            oGrid.setCell(x, y, true);
-       } else {
+            //Update opponents ocean grid to reflect shot
+            targetGrid.setCell(x,y,1);
+            oGrid.setCell(x, y, 1);
+       } else if (sGrid.getCell(x, y) == 0) {
             //Update players target grid to reflect shot
-            targetGrid.setCell(x,y,false);
+            //This block will only update the target grid to 
+            //reflect a shot fired and will not update the
+            //ocean grid to reflect a shot hit
+            targetGrid.setCell(x,y,0);
+            oGrid.setCell(x, y, 0);
        }
     }
 
@@ -162,7 +171,7 @@
      * Method used to check if two ships
      * will overlap 
      */
-    public boolean checkOverlap(boolean[][] sGrid, Ship ship) {
+    public boolean checkOverlap(int[][] sGrid, Ship ship) {
         int size = ship.getSize();
         //Get coordinate and subtract one for array index
         int x = (ship.getxLocation());
@@ -180,16 +189,16 @@
 
             //Check right left of head if head is not on edge
             if(y>=1) {
-                if(sGrid[x][y-1]) {
+                if(sGrid[x][y-1] == 1) {
                     return true;
                 }
-                if(sGrid[x][y+1]) {
+                if(sGrid[x][y+1] == 1) {
                     return true;
                 }
             }
             //Check above head
             if(x>=1) {
-                if(sGrid[x-1][y]) {
+                if(sGrid[x-1][y] == 1) {
                     return true;
                 }
             }
@@ -198,37 +207,37 @@
             //Check if tail is on bottom edge
             if(x+size+1 < GRID_LENGTH) {
                 //Check under tail if not on edge
-                if(sGrid[x+size+1][y]) {
+                if(sGrid[x+size+1][y] == 1) {
                     return true;
                 }
             }
             //Loop check overlap
             for(int i=0; i<size; i++) {
                 //Evaluated to true if there is a ship in the spot
-                if(sGrid[x+i][y]) {
+                if(sGrid[x+i][y] == 1) {
                     return true;
                 }
                 //If ship is not on the edge check for neighbors
 
                 //Check for neighbors if ship is not on an edge
                 if(y>0 && y+1 < GRID_LENGTH) {
-                    if(sGrid[x][y+1]) {
+                    if(sGrid[x][y+1] == 1) {
                         return true;
                     }
-                    if(sGrid[x][y-1]) {
+                    if(sGrid[x][y-1] == 1) {
                         return true;
                     }
 
                 }else {
                     //Check for neighbors if ship is on left edge
                     if(y==0) {
-                        if(sGrid[x][y+1]) {
+                        if(sGrid[x][y+1] == 1) {
                             return true;
                         }
                     }
                     //Check for neightbors if ship is on right edge
                     if((y+1) == GRID_LENGTH) {
-                        if(sGrid[x][y-1]) {
+                        if(sGrid[x][y-1] == 1) {
                             return true;
                         }
                     }
@@ -244,53 +253,53 @@
 
             //Check right of head
             if(y>=1) {
-                if(sGrid[x][y-1]) {
+                if(sGrid[x][y-1] == 1) {
                     return true;
                 }
-                if(sGrid[x][y+1]) {
+                if(sGrid[x][y+1] == 1) {
                     return true;
                 }
             }
             //Check above head
             if(x>=1) {
-                if(sGrid[x-1][y]) {
+                if(sGrid[x-1][y] == 1) {
                     return true;
                 }
             }
 
             //Check right of tail if not on edge
             if(y+size+1 < GRID_WIDTH) {
-                if(sGrid[x][y+size+1]) {
+                if(sGrid[x][y+size+1] == 1) {
                     return true;
                 }
             }
 
             //Evaluate to true if ship is in the spot
             for(int i=0; i<size; i++) {
-                if(sGrid[x][y+i]) {
+                if(sGrid[x][y+i] == 1) {
                     return true;
                 }
                 //If ship is not on the edge check for neighbors
 
                 //Check for neighbors if ship is not on an edge
                 if(x>0 && x+1 < GRID_WIDTH) {
-                    if(sGrid[x+1][y]) {
+                    if(sGrid[x+1][y] == 1) {
                         return true;
                     }
-                    if(sGrid[x-1][y]) {
+                    if(sGrid[x-1][y] == 1) {
                         return true;
                     }
 
                 }else {
                     //Check for neighbors if ship is on left edge
                     if(x==0) {
-                        if(sGrid[x+1][y]) {
+                        if(sGrid[x+1][y] == 1) {
                             return true;
                         }
                     }
                     //Check for neightbors if ship is on right edge
                     if((x+1) == GRID_WIDTH) {
-                        if(sGrid[x-1][y]) {
+                        if(sGrid[x-1][y] == 1) {
                             return true;
                         }
                     }
@@ -307,15 +316,15 @@
      * the ship grid used in setGrid method
      */
 
-    public void setShip(boolean[][] sGrid, Ship ship) {
+    public void setShip(int[][] sGrid, Ship ship) {
         //Evaluated to true if ship is vertical
         if(ship.getOrientation()) {
             for(int i=0; i<ship.getSize(); i++) {
-                sGrid[ship.getxLocation()+i][(ship.getyLocation())] = true;
+                sGrid[ship.getxLocation()+i][(ship.getyLocation())] = 1;
             }
         } else {
             for(int i=0; i<ship.getSize(); i++) {
-                sGrid[(ship.getxLocation())][ship.getyLocation()+i] = true;
+                sGrid[(ship.getxLocation())][ship.getyLocation()+i] = 1;
             }
         }
     }

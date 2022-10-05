@@ -32,8 +32,8 @@
     }
 
     //Set a single shot on the grid overriding the standard setter needed
-    public void setShot(int x, int y, boolean isHit) {
-        boolean[][] grid = this.getGrid();
+    public void setShot(int x, int y, int isHit) {
+        int [][] grid = this.getGrid();
 
         grid[x][y] = isHit;
 
