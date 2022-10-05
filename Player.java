@@ -70,16 +70,20 @@
 
    
     /**
-     * Method to determine is a player has lost
+     * Method to determine is a player has won
      * the method will check the status of the 
-     * player's ships to see if he has any standing
+     * player's target grid to see if they have made 
+     * the necessary amount of hits to sink all ships
+     * 
+     * @returns false when player has not won
+     * @returns true when player has won
      * 
      * The method loops through the target grid 
      * to count amount of hits the player has
      * if the player has 17 total hits, that 
      * means they have hit every ship completely
      */
-    public boolean isLoser(Grid tGrid) {
+    public boolean isWinner(Grid tGrid) {
         int numHits = 0;
         boolean[][] grid = tGrid.getGrid();
 
@@ -91,10 +95,10 @@
             }
         }
         if(numHits == 17) {
-            return false;
+            return true;
         }
         else {
-            return true;
+            return false;
         }
     }
 
@@ -116,6 +120,7 @@
        if(sGrid.getCell(x, y)) {
             //Update players target grid to reflect shot
             targetGrid.setCell(x,y,true);
+            //Update opponents ocean grid;
             oGrid.setCell(x, y, true);
        } else {
             //Update players target grid to reflect shot
