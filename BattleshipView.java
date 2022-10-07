@@ -56,6 +56,8 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
       JButton [] oceanGrid = new JButton[GRID_LENGTH * GRID_WIDTH];
       JButton [] targetGrid = new JButton[GRID_LENGTH * GRID_WIDTH];
 
+      //TODO INITIALIZE THE JBUTTONS
+
 
       String[] shipList = {"Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
       shipBox = new JComboBox<String>(shipList);
@@ -70,25 +72,34 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
       GroupLayout gl = new GroupLayout(pane);
       pane.setLayout(gl);
 
-      gl.setAutoCreateContainerGaps(true);
       gl.setAutoCreateGaps(true);
+      gl.setAutoCreateContainerGaps(true);
 
-      gl.setHorizontalGroup(gl.createParallelGroup(GroupLayout.Alignment.LEADING)
-      .addGroup(gl.createParallelGroup()
-              .addComponent(oceanGrid)
-              .addGap(30)
-              .addComponent(targetGrid)
-              .addGap(30))
-);
+      gl.setHorizontalGroup(
+        gl.createSequentialGroup()
+          .addGroup(gl.createSequentialGroup()
+            .addComponent(oceanGrid[0])
+            .addComponent(oceanGrid[1])
+            .addComponent(oceanGrid[2])
+            .addComponent(oceanGrid[3])
+            .addComponent(oceanGrid[4])
+            )
+      );
 
-gl.setVerticalGroup(gl.createSequentialGroup()
-      .addGroup(gl.createParallelGroup()
-              .addComponent(oceanGrid)
-              .addComponent(targetGrid)
-      .addGap(30))
-);
-pack();
-   }
+      gl.setVerticalGroup(
+        gl.createSequentialGroup()
+        .addGroup(gl.createParallelGroup(GroupLayout.Alignment.LEADING)
+          .addComponent(oceanGrid[0])
+          .addComponent(oceanGrid[1])
+          .addComponent(oceanGrid[2])
+          .addComponent(oceanGrid[3])
+          .addComponent(oceanGrid[4])
+
+          )
+      );
+    
+      pack();
+    }
 
     public void actionPerformed(ActionEvent e) {
       JComboBox cb = (JComboBox)e.getSource();
