@@ -20,17 +20,22 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
     JFrame mainFrame;
 
     //Player Grids
-    /*
-    JInternalFrame oceanGrid;
-    JInternalFrame targetGrid;
-    */
-    JButton [] oceanGrid;
-    JButton [] targetGrid;
+    JButton[][] oceanGrid;
+    JRadioButton[][] targetGrid;
 
 
     //Ship Image and dropdown Menu
     JComboBox shipBox;
     ImageIcon shipIcon;
+
+    //String arrays for the top and side bars
+    //holding the coordinate values
+    String[] gridTopStrings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+    String[] gridSideStrings = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+
+    JLabel[] gridNumLabels = new JLabel[GRID_LENGTH];
+    JLabel[] gridLetterLabels = new JLabel[GRID_WIDTH];
+    
 
     //GUI buttons
     JButton confirmShips;
@@ -53,10 +58,22 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
       targetGrid.setVisible(true);
       */
 
-      JButton [] oceanGrid = new JButton[GRID_LENGTH * GRID_WIDTH];
-      JButton [] targetGrid = new JButton[GRID_LENGTH * GRID_WIDTH];
+      JButton[][] oceanGrid = new JButton[GRID_LENGTH][GRID_WIDTH];
+      JRadioButton[][] targetGrid = new JRadioButton[GRID_LENGTH][GRID_WIDTH];
 
-      //TODO INITIALIZE THE JBUTTONS
+      //Initialize array of JButtons
+      for(int i=0; i<GRID_LENGTH; i++) {
+        for(int j=0; j<GRID_WIDTH; j++) {
+          oceanGrid[i][j] = new JButton();
+          targetGrid[i][j] = new JRadioButton();
+        }
+      }
+
+      //Initialize array of JLabels
+      for(int i=0; i<GRID_LENGTH; i++) {
+        gridNumLabels[i] = new JLabel(gridTopStrings[i]);
+        gridLetterLabels[i] = new JLabel(gridSideStrings[i]);
+      }
 
 
       String[] shipList = {"Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
@@ -64,10 +81,10 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
       shipBox.setVisible(true);
       shipBox.addActionListener(shipBox);
 
-      createLayout(oceanGrid, targetGrid, shipBox);
+      createLayout(oceanGrid, targetGrid, shipBox, gridNumLabels, gridLetterLabels);
     }
 
-    private void createLayout(JButton[] oceanGrid, JButton[] targetGrid, JComboBox shipBox ) {
+    private void createLayout(JButton[][] oceanGrid, JRadioButton[][] targetGrid, JComboBox shipBox, JLabel[] gridNumLabels, JLabel[] gridLetterLabels ) {
       Container pane = getContentPane();
       GroupLayout gl = new GroupLayout(pane);
       pane.setLayout(gl);
@@ -75,28 +92,154 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
       gl.setAutoCreateGaps(true);
       gl.setAutoCreateContainerGaps(true);
 
+
+      gl.setHorizontalGroup(
+        gl.createSequentialGroup()
+        .addGroup(gl.createParallelGroup(GroupLayout.Alignment.LEADING) //This group holds the Letters for the grid
+          .addGap(30)
+          .addComponent(gridLetterLabels[0])
+          .addGap(30)
+          .addComponent(gridLetterLabels[1])
+          .addGap(30)
+          .addComponent(gridLetterLabels[2])
+          .addGap(30)
+          .addComponent(gridLetterLabels[3])
+          .addGap(30)
+          .addComponent(gridLetterLabels[4])
+          .addGap(30)
+          .addComponent(gridLetterLabels[5])
+          .addGap(30)
+          .addComponent(gridLetterLabels[6])
+          .addGap(30)
+          .addComponent(gridLetterLabels[7])
+          .addGap(30)
+          .addComponent(gridLetterLabels[8])
+          .addGap(30)
+          .addComponent(gridLetterLabels[9])
+          .addGap(30))
+          .addGap(30)
+        .addGroup(gl.createParallelGroup() //This group hold the first column
+          .addComponent(gridNumLabels[0])
+          .addGap(30)
+          .addComponent(targetGrid[0][0])
+          .addGap(30)
+          .addComponent(targetGrid[1][0])
+          .addGap(30)
+          .addComponent(targetGrid[2][0])
+          .addGap(30)
+          .addComponent(targetGrid[3][0])
+          .addGap(30)
+          .addComponent(targetGrid[4][0])
+          .addGap(30)
+          .addComponent(targetGrid[5][0])
+          .addGap(30)
+          .addComponent(targetGrid[6][0])
+          .addGap(30)
+          .addComponent(targetGrid[7][0])
+          .addGap(30)
+          .addComponent(targetGrid[8][0])
+          .addGap(30)
+          .addComponent(targetGrid[9][0])
+          .addGap(30)
+        )
+      );
+
+      gl.setVerticalGroup(
+        gl.createParallelGroup()
+        .addGroup(gl.createSequentialGroup() //This group holds the Letters for the grid
+          .addGap(30)
+          .addComponent(gridLetterLabels[0])
+          .addGap(30)
+          .addComponent(gridLetterLabels[1])
+          .addGap(30)
+          .addComponent(gridLetterLabels[2])
+          .addGap(30)
+          .addComponent(gridLetterLabels[3])
+          .addGap(30)
+          .addComponent(gridLetterLabels[4])
+          .addGap(30)
+          .addComponent(gridLetterLabels[5])
+          .addGap(30)
+          .addComponent(gridLetterLabels[6])
+          .addGap(30)
+          .addComponent(gridLetterLabels[7])
+          .addGap(30)
+          .addComponent(gridLetterLabels[8])
+          .addGap(30)
+          .addComponent(gridLetterLabels[9])
+          .addGap(30))
+        .addGroup(gl.createSequentialGroup() //This group holds the first column of the grid
+        .addComponent(gridNumLabels[0])
+        .addGap(30)
+        .addComponent(targetGrid[0][0])
+        .addGap(30)
+        .addComponent(targetGrid[1][0])
+        .addGap(30)
+        .addComponent(targetGrid[2][0])
+        .addGap(30)
+        .addComponent(targetGrid[3][0])
+        .addGap(30)
+        .addComponent(targetGrid[4][0])
+        .addGap(30)
+        .addComponent(targetGrid[5][0])
+        .addGap(30)
+        .addComponent(targetGrid[6][0])
+        .addGap(30)
+        .addComponent(targetGrid[7][0])
+        .addGap(30)
+        .addComponent(targetGrid[8][0])
+        .addGap(30)
+        .addComponent(targetGrid[9][0])
+        .addGap(30)
+        )
+      );
+
+
+      /**
       gl.setHorizontalGroup(
         gl.createSequentialGroup()
           .addGroup(gl.createSequentialGroup()
-            .addComponent(oceanGrid[0])
-            .addComponent(oceanGrid[1])
-            .addComponent(oceanGrid[2])
-            .addComponent(oceanGrid[3])
-            .addComponent(oceanGrid[4])
+            .addComponent(gridNumLabels[0])
+            .addGap(30)
+            .addComponent(gridNumLabels[1])
+            .addGap(30)
+            .addComponent(gridNumLabels[2])
+            .addGap(30)
+            .addComponent(gridNumLabels[3])
+            .addGap(30)
+            .addComponent(gridNumLabels[4])
+            .addGap(30)
+            .addComponent(gridNumLabels[5])
+            .addGap(30)
+            .addComponent(gridNumLabels[6])
+            .addGap(30)
+            .addComponent(gridNumLabels[7])
+            .addGap(30)
+            .addComponent(gridNumLabels[8])
+            .addGap(30)
+            .addComponent(gridNumLabels[9])
+            
             )
+          .addGroup(gl.createParallelGroup(null)
+            .addComponent()
+          )
       );
 
       gl.setVerticalGroup(
         gl.createSequentialGroup()
         .addGroup(gl.createParallelGroup(GroupLayout.Alignment.LEADING)
-          .addComponent(oceanGrid[0])
-          .addComponent(oceanGrid[1])
-          .addComponent(oceanGrid[2])
-          .addComponent(oceanGrid[3])
-          .addComponent(oceanGrid[4])
-
+        .addComponent(gridNumLabels[0])
+        .addComponent(gridNumLabels[1])
+        .addComponent(gridNumLabels[2])
+        .addComponent(gridNumLabels[3])
+        .addComponent(gridNumLabels[4])
+        .addComponent(gridNumLabels[5])
+        .addComponent(gridNumLabels[6])
+        .addComponent(gridNumLabels[7])
+        .addComponent(gridNumLabels[8])
+        .addComponent(gridNumLabels[9])
           )
-      );
+      );*/
     
       pack();
     }
