@@ -17,7 +17,8 @@
  * 
  * Ocean/Ship Grid Key
  *  -1: No ship
- *   1: Ship
+ *   0: Ship Good
+ *   1: Ship Hit
  * 
  */
 
