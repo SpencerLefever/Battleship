@@ -24,16 +24,36 @@
     final int GRID_LENGTH = 10;
     final int GRID_WIDTH = 10;
 
+    
+    /**
+     * * Ocean/Ship Grid Constants Key
+     *  -1: No ship
+     *   0: Ship Good
+     *   1: Ship Hit
+     * 
+     *  Target Grid Key
+     *  -1: Null/No Shot fired
+     *   0: Miss/Shot fired
+     *   1: Hit/Shot fired 
+     */
+
+     final int NO_SHIP = -1;
+     final int SHIP_GOOD = 0;
+     final int SHIP_HIT = 1;
+
+     final int NO_SHOT = -1;
+     final int SHOT_MISS = 0;
+     final int SHOT_HIT = 1;
+
+
    //Create grids and array of ships for player
     private Grid targetGrid;
-    private Grid oceanGrid;
     private Grid shipGrid;
     private Ship[] shipArr = new Ship[NUM_SHIPS];
     
     public Player(int length, int width) {
         //Initialize grids
         targetGrid = new Grid(length, width);
-        oceanGrid = new Grid(length, width);
         shipGrid = new Grid(length, width);
         
         //Initialize shipArr
@@ -50,14 +70,6 @@
 
     public void setTargetGrid(Grid t) {
         targetGrid = t;
-    }
-
-    public Grid getOceanGrid() {
-        return oceanGrid;
-    }
-
-    public void setOceanGrid(Grid o) {
-        oceanGrid = o;
     }
 
     public Grid getShipGrid() {
@@ -86,14 +98,23 @@
     public boolean isWinner() {
         int numHits = 0;
 
+        /**
+         * Loop to accumulate the ship size to 
+         * check if a player has sunk every ship 
+         */
+        int shipSize = 0;
+        for(int i=0; i<NUM_SHIPS; i++){
+            shipSize += shipArr[i].getSize();
+        }
+
         for(int i=0; i<GRID_LENGTH; i++) {
             for(int j=0; j<GRID_WIDTH; j++) {
-                if(targetGrid.getCell(i,j) == 1) {
+                if(targetGrid.getCell(i,j) == SHOT_HIT) {
                     numHits++;
                 }
             }
         }
-        if(numHits == 17) {
+        if(numHits == shipSize) {
             return true;
         }
         else {
@@ -117,19 +138,18 @@
 
        //Return if shot is a repeat shot
        if(targetGrid.getCell(x, y) == 0 || targetGrid.getCell(x, y) == 1) {
-            System.out.println("Repeat Shot");
             return;
        }
 
        //Evaluates to true is shot is a hit
-       if(opponentGrid.getCell(x, y) == 0) {
+       if(opponentGrid.getCell(x, y) == SHIP_GOOD) {
             /**
              * Update the player's target grid to reflect hit
              * Update opponents ship grid that was passed in
              */
-            targetGrid.setCell(x,y,1);
-            opponentGrid.setCell(x, y, 1);
-       } else if (opponentGrid.getCell(x, y) == -1) {
+            targetGrid.setCell(x,y,SHIP_HIT);
+            opponentGrid.setCell(x, y, SHIP_HIT);
+       } else if (opponentGrid.getCell(x, y) == NO_SHIP) {
 
           /**
            * Update player's target grid to reflect miss
@@ -156,6 +176,16 @@
                 //Set random location for ship head
                 shipArr[i].setxLocation((int)(9.0*Math.random()));
                 shipArr[i].setyLocation((int)(9.0*Math.random()));
+
+                //Set randon orientations
+                double orientation = Math.random();
+                if(orientation > 0.5){
+                    shipArr[i].setOrientation(true);
+                }
+                else {
+                    shipArr[i].setOrientation(false);
+                }
+
                 //Check for overlapping ships
                 for(int j=0; j<NUM_SHIPS; j++) {
 
@@ -165,6 +195,9 @@
 
             //Update ship array to true values for ship
             setShip(shipGrid.getGrid(), shipArr[i]);
+
+            System.out.println("Ship Grid after ship placement " + (i+1) + "\n");
+            shipGrid.printGrid();
         }
     }
 
@@ -190,16 +223,16 @@
 
             //Check right left of head if head is not on edge
             if(y>=1) {
-                if(sGrid[x][y-1] == 0) {
+                if(sGrid[x][y-1] == SHIP_GOOD) {
                     return true;
                 }
-                if(sGrid[x][y+1] == 0) {
+                if(sGrid[x][y+1] == SHIP_GOOD) {
                     return true;
                 }
             }
             //Check above head
             if(x>=1) {
-                if(sGrid[x-1][y] == 0) {
+                if(sGrid[x-1][y] == SHIP_GOOD) {
                     return true;
                 }
             }
@@ -208,37 +241,37 @@
             //Check if tail is on bottom edge
             if(x+size+1 < GRID_LENGTH) {
                 //Check under tail if not on edge
-                if(sGrid[x+size+1][y] == 0) {
+                if(sGrid[x+size+1][y] == SHIP_GOOD) {
                     return true;
                 }
             }
             //Loop check overlap
             for(int i=0; i<size; i++) {
                 //Evaluated to true if there is a ship in the spot
-                if(sGrid[x+i][y] == 0) {
+                if(sGrid[x+i][y] == SHIP_GOOD) {
                     return true;
                 }
                 //If ship is not on the edge check for neighbors
 
                 //Check for neighbors if ship is not on an edge
                 if(y>0 && y+1 < GRID_LENGTH) {
-                    if(sGrid[x][y+1] == 0) {
+                    if(sGrid[x][y+1] == SHIP_GOOD) {
                         return true;
                     }
-                    if(sGrid[x][y-1] == 0) {
+                    if(sGrid[x][y-1] == SHIP_GOOD) {
                         return true;
                     }
 
                 }else {
                     //Check for neighbors if ship is on left edge
                     if(y==0) {
-                        if(sGrid[x][y+1] == 0) {
+                        if(sGrid[x][y+1] == SHIP_GOOD) {
                             return true;
                         }
                     }
                     //Check for neightbors if ship is on right edge
                     if((y+1) == GRID_LENGTH) {
-                        if(sGrid[x][y-1] == 0) {
+                        if(sGrid[x][y-1] == SHIP_GOOD) {
                             return true;
                         }
                     }
@@ -254,59 +287,67 @@
 
             //Check right of head
             if(y>=1) {
-                if(sGrid[x][y-1] == 0) {
+                if(sGrid[x][y-1] == SHIP_GOOD) {
                     return true;
                 }
-                if(sGrid[x][y+1] == 0) {
+                if(sGrid[x][y+1] == SHIP_GOOD) {
                     return true;
                 }
             }
             //Check above head
             if(x>=1) {
-                if(sGrid[x-1][y] == 0) {
+                if(sGrid[x-1][y] == SHIP_GOOD) {
                     return true;
                 }
             }
 
             //Check right of tail if not on edge
             if(y+size+1 < GRID_WIDTH) {
-                if(sGrid[x][y+size+1] == 0) {
+                if(sGrid[x][y+size+1] == SHIP_GOOD) {
                     return true;
                 }
             }
 
             //Evaluate to true if ship is in the spot
             for(int i=0; i<size; i++) {
-                if(sGrid[x][y+i] == 0) {
+                if(sGrid[x][y+i] == SHIP_GOOD) {
                     return true;
                 }
                 //If ship is not on the edge check for neighbors
 
                 //Check for neighbors if ship is not on an edge
                 if(x>0 && x+1 < GRID_WIDTH) {
-                    if(sGrid[x+1][y] == 0) {
+                    if(sGrid[x+1][y] == SHIP_GOOD) {
                         return true;
                     }
-                    if(sGrid[x-1][y] == 0) {
+                    if(sGrid[x-1][y] == SHIP_GOOD) {
                         return true;
                     }
 
                 }else {
                     //Check for neighbors if ship is on left edge
                     if(x==0) {
-                        if(sGrid[x+1][y] == 0) {
+                        if(sGrid[x+1][y] == SHIP_GOOD) {
                             return true;
                         }
                     }
                     //Check for neightbors if ship is on right edge
                     if((x+1) == GRID_WIDTH) {
-                        if(sGrid[x-1][y] == 0) {
+                        if(sGrid[x-1][y] == SHIP_GOOD) {
                             return true;
                         }
                     }
                 }
             }
-            
+
+            //Check if ship tail has neighbors 
+            //Check if tail is on bottom edge
+            if(y+size+1 < GRID_WIDTH) {
+                //Check under tail if not on edge
+                if(sGrid[x][y+size+1] == SHIP_GOOD) {
+                    return true;
+                }
+            }            
         }
         return false;
 

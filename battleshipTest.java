@@ -25,11 +25,6 @@
         player1.setGridRand();
         player2.setGridRand();
 
-        //System.out.println("Player 1's Ship Grid");
-        //Grid shipGrid1 = player1.getShipGrid();
-        //shipGrid1.printGrid();
-
-        int count = 0;
         //Loop taking turns shooting until someone wins
         do {
             
@@ -43,18 +38,14 @@
 
             player2.fireShot(player1.getShipGrid(), player2Shot);
 
-            System.out.println(count);
-            count++;
         }while(!player1.isWinner() && !player2.isWinner());
     
         Grid targetGrid1 = player1.getTargetGrid();
         Grid shipGrid1 = player1.getShipGrid();
-        Grid oceanGrid1 = player1.getOceanGrid();
         
         Grid targetGrid2 = player2.getTargetGrid();
         Grid shipGrid2 = player2.getShipGrid();
-        Grid oceanGrid2 = player2.getOceanGrid();
-
+        
         if(player1.isWinner()) {
             System.out.println("Player 1 Won");
             //System.out.println("Player 1 Ocean Grid");
@@ -63,6 +54,11 @@
             targetGrid1.printGrid();
             System.out.println("\nPlayer 2 Ship Grid");
             shipGrid2.printGrid();
+            System.out.println("\n\n\nPlayer 2's Target Grid");
+            targetGrid2.printGrid();
+            System.out.println("\n\n\nPlayer 1's Ship Grid");
+            shipGrid1.printGrid();
+
         }
         if(player2.isWinner()) {
             System.out.println("Player 2 Won");
@@ -72,6 +68,10 @@
             targetGrid2.printGrid();
             System.out.println("\nPlayer 1 Ship Grid");
             shipGrid1.printGrid();
+            System.out.println("\n\n\nPlayer 1's Target Grid");
+            targetGrid1.printGrid();
+            System.out.println("\n\n\nPlayer 2's Ship Grid");
+            shipGrid2.printGrid();
 
         }
     }
