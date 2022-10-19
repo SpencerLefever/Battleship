@@ -50,11 +50,22 @@
     private Grid targetGrid;
     private Grid shipGrid;
     private Ship[] shipArr = new Ship[NUM_SHIPS];
+
+    //Variables for server and client
+    private BattleshipClient client;
+    private BattleshipServer server;
     
-    public Player(int length, int width) {
+    public Player(int length, int width, String role, String host) {
         //Initialize grids
         targetGrid = new Grid(length, width);
         shipGrid = new Grid(length, width);
+
+        if(role == "server") {
+            server.getInstance();
+        }
+        else if (role == "client") {
+            client.getInstance(host);
+        }
         
         //Initialize shipArr
         shipArr[0] = new Ship(5, "Carrier", false, -1, -1, true);
@@ -80,6 +91,21 @@
         shipGrid = s;
     }
 
+    public BattleshipClient getBattleshipClient() {
+        return client;
+    }
+
+    public void setBattleshipClient(BattleshipClient c) {
+        client = c;
+    }
+
+    public BattleshipServer getBattleshipServer() {
+        return server;
+    }
+
+    public void setBattleshipServer(BattleshipServer s) {
+        server = s;
+    }
    
     /**
      * Method to determine is a player has won
