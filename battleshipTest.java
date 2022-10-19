@@ -8,7 +8,8 @@
  * winner is determined
  */
 
- import java.lang.Math;
+ import java.io.IOError;
+import java.lang.Math;
 
  public class battleshipTest {
     public static void main(String[] args) {
@@ -16,9 +17,14 @@
         final int NUM_SHIPS = 5;
         final int GRID_LENGTH = 10;
         final int GRID_WIDTH = 10;
+
+        if(args.length != 3) {
+            System.out.println("Error: Role and host name must be passed\nEnter null if role is server");
+            System.exit(-1);
+        }
         
-        Player player1 = new Player(GRID_LENGTH, GRID_WIDTH);
-        Player player2 = new Player(GRID_LENGTH, GRID_WIDTH);
+        Player player1 = new Player(GRID_LENGTH, GRID_WIDTH, args[1], args[2]);
+        Player player2 = new Player(GRID_LENGTH, GRID_WIDTH, args[1], args[2]);
 
 
         //Set grids
