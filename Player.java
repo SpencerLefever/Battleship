@@ -156,6 +156,7 @@
      * 
      * Passes in the opponents ship grid and ocean grid
      * to check for ships and update ocean grid
+     * Server or Host role is also passed in so correct method is called
      */
 
     public void fireShot(Grid opponentGrid, Shot s) {
@@ -163,7 +164,7 @@
        int y = s.getyCoordinate();
 
        //Return if shot is a repeat shot
-       if(targetGrid.getCell(x, y) == 0 || targetGrid.getCell(x, y) == 1) {
+       if(targetGrid.getCell(x, y) == SHOT_MISS || targetGrid.getCell(x, y) == SHOT_HIT) {
             return;
        }
 
@@ -182,6 +183,7 @@
            */
             targetGrid.setCell(x,y,0);
        }
+
     }
 
     /** 

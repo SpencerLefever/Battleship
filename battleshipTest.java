@@ -34,15 +34,22 @@ import java.lang.Math;
         //Loop taking turns shooting until someone wins
         do {
             
-            //Player 1 fires shot
-            Shot player1Shot = new Shot((int)(9.0*Math.random()), (int)(9.0*Math.random()));
+            // //Player 1 fires shot
+            // Shot player1Shot = new Shot((int)(9.0*Math.random()), (int)(9.0*Math.random()));
 
-            player1.fireShot(player2.getShipGrid(), player1Shot);
+            // player1.fireShot(player2.getShipGrid(), player1Shot);
 
-            //Player 2 fires shot
-            Shot player2Shot = new Shot((int)(9.0*Math.random()), (int)(9.0*Math.random()));
+            // //Player 2 fires shot
+            // Shot player2Shot = new Shot((int)(9.0*Math.random()), (int)(9.0*Math.random()));
 
-            player2.fireShot(player1.getShipGrid(), player2Shot);
+            // player2.fireShot(player1.getShipGrid(), player2Shot);
+
+            /**Ask user for input for a shot 
+             * Send shot info across the network
+             */
+
+             //Player 1 types in shot coordinates
+
 
         }while(!player1.isWinner() && !player2.isWinner());
     
