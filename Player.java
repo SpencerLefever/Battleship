@@ -59,13 +59,6 @@
         //Initialize grids
         targetGrid = new Grid(length, width);
         shipGrid = new Grid(length, width);
-
-        if(role == "server") {
-            server.getInstance();
-        }
-        else if (role == "client") {
-            client.getInstance(host);
-        }
         
         //Initialize shipArr
         shipArr[0] = new Ship(5, "Carrier", false, -1, -1, true);

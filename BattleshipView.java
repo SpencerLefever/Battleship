@@ -10,6 +10,8 @@
  * box to input the coordinates to send
  */
 
+import java.io.EOFException;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.awt.BorderLayout;
@@ -24,8 +26,10 @@ import javax.swing.SwingUtilities;
 
  public class BattleshipView extends JFrame{
 
+    private ObjectOutputStream output; // output stream to client
+    private ObjectInputStream input; // input stream from client
     private JTextField inputField;
-    private JTextArea outputField;
+    private JTextArea displayArea;
 
 
     public BattleshipView() {
@@ -33,13 +37,13 @@ import javax.swing.SwingUtilities;
        setInputField();
        setOutputField();
        add( inputField, BorderLayout.NORTH);
-       add( new JScrollPane(outputField), BorderLayout.CENTER);
+       add( new JScrollPane(displayArea), BorderLayout.CENTER);
 
     }
 
     public void setInputField() {
         inputField = new JTextField();
-        inputField.setEditable(false);
+        inputField.setEditable(true);
     }
 
     public JTextField getInputField () {
@@ -47,12 +51,7 @@ import javax.swing.SwingUtilities;
     }
 
     public void setOutputField() {
-        outputField = new JTextArea();
+        displayArea = new JTextArea();
     }
-
-
-
-
-
 
  }

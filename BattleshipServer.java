@@ -12,64 +12,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class BattleshipServer extends JFrame 
-{
-   private JTextField enterField; // inputs message from user
-   private JTextArea displayArea; // display information to user
+
+ public class BattleshipServer implements Role {
+
    private ObjectOutputStream output; // output stream to client
    private ObjectInputStream input; // input stream from client
-   private ServerSocket server; // server socket
-   private Socket connection; // connection to client
-   private int counter = 1; // counter of number of connections
-   private BattleshipServer instance = null;
+   private ServerSocket server;
+   private Socket connection;
+   private int counter = 1;
 
-   // set up GUI
-   private BattleshipServer()
-   {
-      super( "BattleshipServer" );
-
-      enterField = new JTextField(); // create enterField
-      enterField.setEditable( false );
-      enterField.addActionListener(
-         new ActionListener() 
-         {
-            // send message to client
-            public void actionPerformed( ActionEvent event )
-            {
-               sendData( event.getActionCommand() );
-               enterField.setText( "" );
-            } // end method actionPerformed
-         } // end anonymous inner class
-      ); // end call to addActionListener
-
-      add( enterField, BorderLayout.NORTH );
-
-      displayArea = new JTextArea(); // create displayArea
-      add( new JScrollPane( displayArea ), BorderLayout.CENTER );
-
-      setSize( 300, 150 ); // set size of window
-      setVisible( true ); // show window
-   } // end Server constructor
-
-   public BattleshipServer getInstance() {
-      if(instance == null) {
-         instance = new BattleshipServer();
-      }
-      return instance;
-   }
-
-   // set up and run server 
-   public void runServer()
-   {
+   /**Method to setup server overidden method from interface */
+   public void setup() {
       try // set up server to receive connections; process connections
       {
          server = new ServerSocket( 12345, 100 ); // create ServerSocket
@@ -97,7 +52,7 @@ public class BattleshipServer extends JFrame
       {
          ioException.printStackTrace();
       } // end catch
-   } // end method runServer
+   }
 
    // wait for connection to arrive, then display connection info
    private void waitForConnection() throws IOException
@@ -109,7 +64,7 @@ public class BattleshipServer extends JFrame
    } // end method waitForConnection
 
    // get streams to send and receive data
-   private void getStreams() throws IOException
+   public void getStreams() throws IOException
    {
       // set up output stream for objects
       output = new ObjectOutputStream( connection.getOutputStream() );
@@ -122,13 +77,13 @@ public class BattleshipServer extends JFrame
    } // end method getStreams
 
    // process connection with client
-   private void processConnection() throws IOException
+   public void processConnection() throws IOException
    {
       String message = "Connection successful";
       sendData( message ); // send connection successful message
 
       // enable enterField so server user can send messages
-      setTextFieldEditable( true );
+      //setTextFieldEditable( true );
 
       do // process messages sent from client
       { 
@@ -149,7 +104,7 @@ public class BattleshipServer extends JFrame
    private void closeConnection() 
    {
       displayMessage( "\nTerminating connection\n" );
-      setTextFieldEditable( false ); // disable enterField
+      //setTextFieldEditable( false ); // disable enterField
 
       try 
       {
@@ -163,46 +118,48 @@ public class BattleshipServer extends JFrame
       } // end catch
    } // end method closeConnection
 
-   // send message to client
-   private void sendData( String message )
-   {
-      try // send object to client
-      {
-         output.writeObject( "SERVER>>> " + message );
-         output.flush(); // flush output to client
-         displayMessage( "\nSERVER>>> " + message );
-      } // end try
-      catch ( IOException ioException ) 
-      {
-         displayArea.append( "\nError writing object" );
-      } // end catch
-   } // end method sendData
+   
+  // send message to client
+  private void sendData( String message ) throws IOException
+  {
+     try // send object to client
+     {
+        output.writeObject( "SERVER>>> " + message );
+        output.flush(); // flush output to client
+        displayMessage( "\nSERVER>>> " + message );
+     } // end try
+     catch ( IOException ioException ) 
+     {
+        //displayArea.append( "\nError writing object" );
+        output.writeObject("\nError writing object");
+     } // end catch
+  } // end method sendData
 
-   // manipulates displayArea in the event-dispatch thread
-   private void displayMessage( final String messageToDisplay )
-   {
-      SwingUtilities.invokeLater(
-         new Runnable() 
-         {
-            public void run() // updates displayArea
-            {
-               displayArea.append( messageToDisplay ); // append message
-            } // end method run
-         } // end anonymous inner class
-      ); // end call to SwingUtilities.invokeLater
-   } // end method displayMessage
+  // manipulates displayArea in the event-dispatch thread
+  private void displayMessage( final String messageToDisplay )
+  {
+        new Runnable() 
+        {
+           public void run() // updates displayArea
+           {
+              System.out.println( messageToDisplay ); // append message
+           } // end method run
+        }; // end anonymous inner class
+  } // end method displayMessage
 
-   // manipulates enterField in the event-dispatch thread
-   private void setTextFieldEditable( final boolean editable )
-   {
-      SwingUtilities.invokeLater(
-         new Runnable()
-         {
-            public void run() // sets enterField's editability
-            {
-               enterField.setEditable( editable );
-            } // end method run
-         }  // end inner class
-      ); // end call to SwingUtilities.invokeLater
-   } // end method setTextFieldEditable
-} // end class Server
+//   // manipulates enterField in the event-dispatch thread
+//   private void setTextFieldEditable( final boolean editable )
+//   {
+//      SwingUtilities.invokeLater(
+//         new Runnable()
+//         {
+//            public void run() // sets enterField's editability
+//            {
+//               enterField.setEditable( editable );
+//            } // end method run
+//         }  // end inner class
+//      ); // end call to SwingUtilities.invokeLater
+//   } // end method setTextFieldEditable
+
+
+ }
