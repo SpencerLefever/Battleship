@@ -16,9 +16,10 @@ public class OutputView extends JTextArea implements Observer{
 
 
 
-   public OutputView() {
+   public OutputView(BattleshipView view) {
        super();
        setVisible(true);
+       view.addObserver(this);
    }
 
    

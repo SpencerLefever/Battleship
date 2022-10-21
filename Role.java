@@ -21,4 +21,6 @@ import java.io.ObjectOutputStream;
 
    public String getOutputString();
 
+   public void sendData(String message);
+
  }

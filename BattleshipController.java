@@ -97,6 +97,10 @@ import java.net.UnknownHostException;
             //Client should send message to server regarding the results
 
 
+            //Notify observers of new message being sent
+            view.notifyObserver(inputString);
+
+
             /**
              * After the client shot
              * outputString hold the output from the client
@@ -158,12 +162,39 @@ import java.net.UnknownHostException;
          
       } else if (roleString == "server") {
 
+         //Dont allow Server to type in input field while it's the client's turn
+         view.inputField.setEditable(false);
          do {
             networkRole.getStreams();
             inputString = networkRole.processConnection();
          } while( !inputString.equals("CLIENT>>> TERMINATE") );
 
       }
+
+   }
+
+   //Method for the client to send the result to the server
+   public void clientSendResutlt() throws IOException {
+      if(roleString == "client") {
+
+      } else if (roleString == "server") {   //Wait to receive result if client
+         networkRole.getStreams();
+         outputString = networkRole.getOutputString();
+      }
+   }
+
+   //Method for the server to send the result of the shot to the client
+   public void serverSendResult() throws IOException {
+      if(roleString == "server") {
+
+      } else if (roleString == "client") {   //Wait to receive results if client
+         networkRole.getStreams();
+         outputString = networkRole.getOutputString();
+      }
+   }
+
+   //Method to interpret the coordinate message
+   public void interpretMessage(String message) {
 
    }
 

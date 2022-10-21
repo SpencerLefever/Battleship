@@ -43,8 +43,10 @@ import javax.swing.SwingUtilities;
 
     public BattleshipView() {
         this.observers = new ArrayList<>();
-        inputField = new InputView();
-        displayField = new OutputView();
+        // inputField = new InputView(this);
+        // displayField = new OutputView(this);
+        setInputField();
+        setDisplayField();
 
         mainFrame = new JFrame("Battleship");
 
@@ -57,9 +59,6 @@ import javax.swing.SwingUtilities;
 
         mainFrame.setSize(300,150);
         mainFrame.setVisible(true);
-
-        addObserver(displayField);
-        addObserver(inputField);
     }
 
     //Subject interface methods
@@ -82,7 +81,7 @@ import javax.swing.SwingUtilities;
 
     //Getters and setters
     public void setInputField() {
-        inputField = new InputView();
+        inputField = new InputView(this);
         inputField.setEditable(true);
 
         inputField.addActionListener(
@@ -100,7 +99,7 @@ import javax.swing.SwingUtilities;
     }
 
     public void setDisplayField() {
-        displayField = new OutputView();
+        displayField = new OutputView(this);
     }
     
     public JTextArea getDisplayField() {

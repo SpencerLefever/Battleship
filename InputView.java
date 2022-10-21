@@ -17,7 +17,7 @@
     private String message;
     
 
-    public InputView() {
+    public InputView(BattleshipView view) {
         inputField = new JTextField();
         inputField.setEditable(true);
         inputField.setVisible(true);
@@ -28,6 +28,8 @@
                 }
             }
         );
+
+        view.addObserver(this);
     }
 
     //Overridden update method
