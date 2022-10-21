@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Spencer Lefever
@@ -9,7 +11,14 @@ import java.io.IOException;
 
  public interface Role {
 
-    public void setup();
+   public void setup();
 
-    public void processConnection() throws IOException;
+   public void getStreams() throws IOException;
+
+   public String processConnection() throws IOException;
+
+   public void closeConnection();
+
+   public String getOutputString();
+
  }

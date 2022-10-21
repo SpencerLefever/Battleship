@@ -10,14 +10,14 @@
  public class BattleshipMVCTest {
     public static void main(String[] args) {
 
-        if(args.length != 3) {
-            System.out.println("Error: Role and host name must be passed\nEnter null if role is server");
-            System.exit(-1);
-        }
+        // if(args.length != 2) {
+        //     System.out.println("Error: Role and host name must be passed\nEnter null if role is server");
+        //     System.exit(-1);
+        // }
 
         BattleshipModel model = new BattleshipModel();
         BattleshipView view = new BattleshipView();
-        BattleshipController controller = new BattleshipController(model, view, args[2]);
+        BattleshipController controller = new BattleshipController(model, view, args[0], "");
     }
  }
 

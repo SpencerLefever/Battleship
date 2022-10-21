@@ -23,141 +23,112 @@ import javax.swing.SwingUtilities;
 
 public class BattleshipClient implements Role
 {
-   
-   private ObjectOutputStream output; // output stream to server
-   private ObjectInputStream input; // input stream from server
-   private String message = ""; // message from server
-   private String chatServer; // host server for this application
-   private Socket client; // socket to communicate with server
 
-   // connect to server and process messages from server
-   public void setup() 
-   {
-      try // connect to server, get streams, process connection
-      {
-         connectToServer(); // create a Socket to make connection
-         getStreams(); // get the input and output streams
-         processConnection(); // process connection
-      } // end try
-      catch ( EOFException eofException ) 
-      {
-         displayMessage( "\nClient terminated connection" );
-      } // end catch
-      catch ( IOException ioException ) 
-      {
-         ioException.printStackTrace();
-      } // end catch
-      finally 
-      {
-         closeConnection(); // close connection
-      } // end finally
-   } // end method runClient
+    private ObjectInputStream input; // input stream from server
+    private ObjectOutputStream output;
+    private String message = ""; // message from server
+    private String battleshipServer; // host server for this application
+    private Socket client; // socket to communicate with server
+  
+    public BattleshipClient(String host) { 
+        battleshipServer = host;
+    }
 
-   // connect to server
-   private void connectToServer() throws IOException
-   {      
-      displayMessage( "Attempting connection\n" );
 
-      // create Socket to make connection to server
-      client = new Socket( InetAddress.getByName( chatServer ), 12345 );
+    //Method to connect to server and process messages from server
+    public void setup() {
+        try {
+            //Connect to server
+            connectToServer();
 
-      // display connection information
-      displayMessage( "Connected to: " + 
-         client.getInetAddress().getHostName() );
-   } // end method connectToServer
+            //Get i/o streams
+            getStreams();
 
-   // get streams to send and receive data
-   public void getStreams() throws IOException
-   {
-      // set up output stream for objects
-      output = new ObjectOutputStream( client.getOutputStream() );      
-      output.flush(); // flush output buffer to send header information
+            //process connection
+            processConnection();
 
-      // set up input stream for objects
-      input = new ObjectInputStream( client.getInputStream() );
+        } catch ( EOFException eofException ) {
+            System.out.println("Client terminated connection");
+        } catch ( IOException ioException ) {
+            ioException.printStackTrace();
+        }
+        finally {
+            closeConnection();
+        }
+    }
 
-      displayMessage( "\nGot I/O streams\n" );
-   } // end method getStreams
+    //Method to connect to the server
+    public void connectToServer() throws IOException {
+        System.out.println("Attempting to connect");
 
-   // process connection with server
-   public void processConnection() throws IOException
-   {
-      // enable enterField so client user can send messages
-      //setTextFieldEditable( true );
+        client = new Socket( InetAddress.getByName(battleshipServer), 12345);
 
-      do // process messages sent from server
-      { 
-         try // read message and display it
-         {
-            message = ( String ) input.readObject(); // read new message
-            displayMessage( "\n" + message ); // display message
-         } // end try
-         catch ( ClassNotFoundException classNotFoundException ) 
-         {
-            displayMessage( "\nUnknown object type received" );
-         } // end catch
+        System.out.println("Connected to: " + client.getInetAddress().getHostName());
+    }
 
-      } while ( !message.equals( "SERVER>>> TERMINATE" ) );
-   } // end method processConnection
+    //Method to send and receive data
+    public void getStreams() throws IOException {
 
-   // close streams and socket
-   private void closeConnection() 
-   {
-      displayMessage( "\nClosing connection" );
-      //setTextFieldEditable( false ); // disable enterField
+        output = new ObjectOutputStream(client.getOutputStream());
+        
+        //MIGHT CAUSE AN ISSUE
+        message = output.toString();
 
-      try 
-      {
-         output.close(); // close output stream
-         input.close(); // close input stream
-         client.close(); // close socket
-      } // end try
-      catch ( IOException ioException ) 
-      {
-         ioException.printStackTrace();
-      } // end catch
-   } // end method closeConnection
+        output.flush();
 
-   // send message to server
-   private void sendData( String message ) throws IOException
-   {
-      try // send object to server
-      {
-         output.writeObject( "CLIENT>>> " + message );
-         output.flush(); // flush data to output
-         displayMessage( "\nCLIENT>>> " + message );
-      } // end try
-      catch ( IOException ioException )
-      {
-         output.writeObject( "\nError writing object" );
-      } // end catch
-   } // end method sendData
+        input = new ObjectInputStream(client.getInputStream());
 
-   // manipulates displayArea in the event-dispatch thread
-   private void displayMessage( final String messageToDisplay )
-   {
-      SwingUtilities.invokeLater(
-         new Runnable()
-         {
-            public void run() // updates displayArea
-            {
-               System.out.println( messageToDisplay );
-            } // end method run
-         }  // end anonymous inner class
-      ); // end call to SwingUtilities.invokeLater
-   } // end method displayMessage
+        System.out.println("Got i/o streams");
+    }
 
-   // // manipulates enterField in the event-dispatch thread
-   // private void setTextFieldEditable( final boolean editable )
-   // {
-   //    SwingUtilities.invokeLater(
-   //       new Runnable() 
-   //       {
-   //          public void run() // sets enterField's editability
-   //          {
-   //             enterField.setEditable( editable );
-   //          } // end method run
-   //       } // end anonymous inner class
-   //    ); // end call to SwingUtilities.invokeLater
-   // } // end method setTextFieldEditable
+    //Method to process connection with server
+    public String processConnection() throws IOException {
+
+        //Send message to client
+        sendData(message);
+
+        do {
+            try {
+                message = (String) input.readObject(); // read new message
+
+                //TODO send message to controller to update data
+            }
+            catch (ClassNotFoundException classNotFoundException) {
+                System.out.println("Unkown object type received");
+            }
+        } while ( !message.equals("SERVER>>> TERMINATE") );
+        return message;
+    }
+
+    //Method to close the connection
+    public void closeConnection() {
+        System.out.println("Closing connection");
+
+        try {
+            output.close();
+            input.close();
+            client.close();
+        } catch ( IOException ioException ) {
+            ioException.printStackTrace();
+        }
+    }
+
+    public void sendData(String message) {
+        
+        try {
+            output.writeObject("CLIENT>>> " + message);
+            output.flush();  
+            
+            //TODO Find out how to update view
+        }
+        catch (IOException ioException) {
+            System.out.println("Error writing object");
+        }
+    }
+
+    //Method to get output object
+    public String getOutputString() {
+        return message;
+    }
+
 } // end class Client
