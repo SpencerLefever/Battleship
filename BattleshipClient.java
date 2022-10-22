@@ -66,6 +66,14 @@ public class BattleshipClient implements Role
         System.out.println("Connected to: " + client.getInetAddress().getHostName());
     }
 
+    public void connect() throws IOException {
+        System.out.println("Attempting to connect");
+
+        client = new Socket( InetAddress.getByName(battleshipServer), 12345);
+
+        System.out.println("Connected to: " + client.getInetAddress().getHostName());
+    }
+
     //Method to send and receive data
     public void getStreams() throws IOException {
 

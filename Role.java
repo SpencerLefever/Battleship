@@ -23,4 +23,6 @@ import java.io.ObjectOutputStream;
 
    public void sendData(String message);
 
+   public void connect() throws IOException;
+
  }

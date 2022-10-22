@@ -18,6 +18,8 @@
         BattleshipModel model = new BattleshipModel();
         BattleshipView view = new BattleshipView();
         BattleshipController controller = new BattleshipController(model, view, args[0], "");
+
+        controller.playGame();
     }
  }
 

@@ -64,9 +64,15 @@ import java.net.UnknownHostException;
       model.player.setGridRand();
 
       //Update grids after theyre set
+      
 
 
       //TODO Establish network connection
+      try { 
+         networkRole.connect();
+      } catch (IOException ioException) {
+         ioException.printStackTrace();
+      } 
 
 
      //Loop to play the game until a player has won
@@ -95,7 +101,7 @@ import java.net.UnknownHostException;
             //Update board
 
             //Client should send message to server regarding the results
-
+            clientSendResutlt();
 
             //Notify observers of new message being sent
             view.notifyObserver(inputString);
@@ -112,7 +118,9 @@ import java.net.UnknownHostException;
             //Update board
 
             //Server should send message to server regarding the results
+            serverSendResult();
 
+            view.notifyObserver(inputString);
 
          } catch (IOException ioException) {
             ioException.printStackTrace();
@@ -121,6 +129,9 @@ import java.net.UnknownHostException;
       }
 
       //After a player has won, send a message to opponent to indicate the game is over
+
+      //Close the connection
+      networkRole.closeConnection();
 
    }
 
@@ -132,6 +143,7 @@ import java.net.UnknownHostException;
          //Do while no input has been sent
          do {
             networkRole.getStreams();
+            networkRole.processConnection();
             outputString = networkRole.getOutputString();
             System.out.println("Printing output string " + outputString);  
 
@@ -152,23 +164,18 @@ import java.net.UnknownHostException;
    public void clientShot() throws IOException {
 
       if(roleString == "client") {
-         //Do while no input has been sent
-         do {
             networkRole.getStreams();
+            networkRole.processConnection();
             outputString = networkRole.getOutputString();
             System.out.println("Printing output string " + outputString);  
 
-         } while(!outputString.equals("CLIENT>>> "));
          
       } else if (roleString == "server") {
 
          //Dont allow Server to type in input field while it's the client's turn
          view.inputField.setEditable(false);
-         do {
-            networkRole.getStreams();
-            inputString = networkRole.processConnection();
-         } while( !inputString.equals("CLIENT>>> TERMINATE") );
-
+         networkRole.getStreams();
+         inputString = networkRole.processConnection();
       }
 
    }
@@ -176,9 +183,13 @@ import java.net.UnknownHostException;
    //Method for the client to send the result to the server
    public void clientSendResutlt() throws IOException {
       if(roleString == "client") {
+         String message = interpretMessage(inputString);
+         networkRole.sendData(message);
+         
 
       } else if (roleString == "server") {   //Wait to receive result if client
          networkRole.getStreams();
+         networkRole.processConnection();
          outputString = networkRole.getOutputString();
       }
    }
@@ -186,15 +197,42 @@ import java.net.UnknownHostException;
    //Method for the server to send the result of the shot to the client
    public void serverSendResult() throws IOException {
       if(roleString == "server") {
+         String message = interpretMessage(inputString);
+         networkRole.sendData(message);
 
       } else if (roleString == "client") {   //Wait to receive results if client
          networkRole.getStreams();
+         networkRole.processConnection();
          outputString = networkRole.getOutputString();
       }
    }
 
-   //Method to interpret the coordinate message
-   public void interpretMessage(String message) {
+   /**
+    * Method to interpret the coordinate message
+    * Method assumes shot message comes in as <x><space><y>
+    */
+
+   final int NO_SHOT = -1;
+   final int SHOT_MISS = 0;
+   final int SHOT_HIT = 1;
+
+   public String interpretMessage(String message) {
+      String x = message.substring(0,0); 
+      String y = message.substring(2, 2);
+      String resultString;
+
+      int result = model.player.checkShot(Integer.parseInt(x), Integer.parseInt(y));
+
+      if(result == SHOT_MISS) {
+         resultString = "miss";
+         return resultString;
+      } else if (result == SHOT_HIT) {
+         resultString = "hit";
+         return resultString;
+      } else {
+         resultString = null;
+         return resultString;
+      }
 
    }
 

@@ -81,6 +81,18 @@ public class BattleshipServer implements Role {
 
     }
 
+    public void connect() throws IOException {
+        //Send waiting for connection message to controller
+        System.out.println("Waiting for connection\n");
+        //Connect with client
+        connection = server.accept();
+
+        //Send connection successful message
+        System.out.println("Connection received from: " 
+            + connection.getInetAddress().getHostName());
+
+    }
+
     //Method to get input and output streams to send to controller
     public void getStreams() throws IOException {
         output = new ObjectOutputStream(connection.getOutputStream());

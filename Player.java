@@ -179,6 +179,30 @@
 
     }
 
+
+    /** 
+     * Method for a player to check if a shot is a hit or miss
+     * This function does not check the opponents target grid for a repeat shot
+     * method assumes check for repeat shot has been complete prior to calling this method
+     */
+
+    public int checkShot(int x, int y) {
+        
+        int result;
+        //Evaluates to true is shot is a hit
+        if(shipGrid.getCell(x, y) == SHIP_GOOD) {
+             /**
+              * Update the player's target grid to reflect hit
+              * Update opponents ship grid that was passed in
+              */
+             shipGrid.setCell(x, y, SHIP_HIT);
+             result = SHOT_HIT;
+        }
+        result = SHOT_MISS;
+        return result;
+     }
+ 
+
     /** 
      * Method for the player to set their
      * ocean grid how they want
