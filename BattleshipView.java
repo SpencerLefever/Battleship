@@ -68,10 +68,10 @@ public class BattleshipView extends JFrame {
                 
                 
                 //Add components to button panel
-                buttonPanel.setLayout(new GridLayout(3,1,25,25));
-                buttonPanel.add(quitButton);
-                buttonPanel.add(restartButton);
+                buttonPanel.setLayout(new GridLayout(1,3,25,25));
+                buttonPanel.add(fireButton);
                 buttonPanel.add(confirmButton);
+		buttonPanel.add(restartButton);
                 
                 
                 //Add components to grid panel
@@ -108,13 +108,9 @@ public class BattleshipView extends JFrame {
                 gridPanel.add(targetGrid);                
                 
                 gridPanel.setVisible(true);
-        
-
-                
-                
-                
+                        
                 //Add panels to main frame
-                add(buttonPanel, BorderLayout.WEST);
+                add(buttonPanel, BorderLayout.PAGE_END);
                 add(gridPanel, BorderLayout.CENTER);
                 add(shipSelectionPanel, BorderLayout.EAST);
                 
@@ -122,17 +118,13 @@ public class BattleshipView extends JFrame {
 
                 // Finalize
                 pack();
-                setResizable(true);
+                setResizable(false);
                 setTitle("BattleShip");
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         }
         
-        /*
         // Add listeners
-        void addQuitListener(ActionListener q){
-                quitButton.addActionListener(q);
-        }
 
         void addRestartListener(ActionListener r){
                 restartButton.addActionListener(r);
@@ -146,9 +138,6 @@ public class BattleshipView extends JFrame {
                 confirmButton.addActionListener(c);
         }
 
-        void addRandomListener(ActionListener r){
-                randomButton.addActionListener(r);
-        }
-        */
+        
 
 }
