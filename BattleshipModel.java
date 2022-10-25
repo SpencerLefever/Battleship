@@ -15,20 +15,20 @@
     final int GRID_WIDTH = 10;
 
     Player player;
-    String role;
+    String networkRole;
     String hostName;
 
 
     public BattleshipModel(){
-        player = new Player(GRID_LENGTH, GRID_WIDTH, role, hostName);
+        player = new Player(GRID_LENGTH, GRID_WIDTH, networkRole, hostName);
     }
 
     public String getRole() {
-        return role;
+        return networkRole;
     }
 
     public void setRole(String role) {
-        this.role = role;
+        this.networkRole = role;
     }
 
     public String getHostName() {

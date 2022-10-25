@@ -8,6 +8,7 @@
  */
 
 import javax.swing.SwingUtilities;
+import java.awt.event.*;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -34,7 +35,6 @@ import java.net.UnknownHostException;
          try {
 
             ip = InetAddress.getLocalHost();
-            System.out.println(ip);
          } catch (UnknownHostException e) {
             e.printStackTrace();
          }
@@ -50,6 +50,7 @@ import java.net.UnknownHostException;
       }
       model = m;
       view = v;
+      view.setVisible(true);
    }
 
    /**
@@ -71,147 +72,24 @@ import java.net.UnknownHostException;
       //Update grids after theyre set
       
 
-
-      //TODO Establish network connection
+      //Connect across the network
       networkRole.setup();
-
-      try { 
-         networkRole.connect();
-      } catch (IOException ioException) {
-         ioException.printStackTrace();
-      } 
-
+      
+      
 
      //Loop to play the game until a player has won
       while(!model.player.isWinner()) {
          
-
-         try {
-
-            //Server takes first shot
-            /**
-             * After the server shot,
-             * outputString holds the output from the server
-             * inputString holds message the client received from the server
-             */
-            serverShot();
-
-            /**
-             * Take input string and update the model
-             * 
-             * For the text field test gui 
-             * <0-9><space><0-9> will be passed in
-             */
-            int xCoordinate, yCoordinate;
-
-
-            //Update board
-
-            //Client should send message to server regarding the results
-            clientSendResutlt();
-
-            //Notify observers of new message being sent
-            view.notifyObserver(inputString);
-
-
-            /**
-             * After the client shot
-             * outputString hold the output from the client
-             * inputString hold the message the server received from the client
-             */
-            //Client takes second shot
-            clientShot();
-
-            //Update board
-
-            //Server should send message to server regarding the results
-            serverSendResult();
-
-            view.notifyObserver(inputString);
-
-         } catch (IOException ioException) {
-            ioException.printStackTrace();
-         }
-
+                  
       }
+      System.out.println("After is winner while loop");
+
 
       //After a player has won, send a message to opponent to indicate the game is over
 
       //Close the connection
       networkRole.closeConnection();
 
-   }
-
-
-   //Method for the server to shoot
-   public void serverShot() throws IOException {
-
-      if(roleString.equals("server")) {
-         //Do while no input has been sent
-         do {
-            networkRole.getStreams();
-            networkRole.processConnection();
-            outputString = networkRole.getOutputString();
-            System.out.println("Printing output string " + outputString);  
-
-         } while(!outputString.equals("SERVER>>> "));
-         
-      } else if (roleString.equals("client")) {
-
-         do {
-            networkRole.getStreams();
-            inputString = networkRole.processConnection();
-         } while( !inputString.equals("SERVER>>> TERMINATE") );
-
-      }
-
-   }
-
-   //Method for the client to shoot
-   public void clientShot() throws IOException {
-
-      if(roleString.equals("client")) {
-            networkRole.getStreams();
-            networkRole.processConnection();
-            outputString = networkRole.getOutputString();
-            System.out.println("Printing output string " + outputString);  
-
-         
-      } else if (roleString.equals("server")) {
-
-         //Dont allow Server to type in input field while it's the client's turn
-         view.inputField.setEditable(false);
-         networkRole.getStreams();
-         inputString = networkRole.processConnection();
-      }
-
-   }
-
-   //Method for the client to send the result to the server
-   public void clientSendResutlt() throws IOException {
-      if(roleString.equals("client")) {
-         String message = interpretMessage(inputString);
-         networkRole.sendData(message);
-         
-
-      } else if (roleString.equals("server")) {   //Wait to receive result if client
-         networkRole.getStreams();
-         networkRole.processConnection();
-         outputString = networkRole.getOutputString();
-      }
-   }
-
-   //Method for the server to send the result of the shot to the client
-   public void serverSendResult() throws IOException {
-      if(roleString.equals("server")) {
-         String message = interpretMessage(inputString);
-         networkRole.sendData(message);
-
-      } else if (roleString.equals("client")) {   //Wait to receive results if client
-         networkRole.getStreams();
-         networkRole.processConnection();
-         outputString = networkRole.getOutputString();
-      }
    }
 
    /**
@@ -223,7 +101,7 @@ import java.net.UnknownHostException;
    final int SHOT_MISS = 0;
    final int SHOT_HIT = 1;
 
-   public String interpretMessage(String message) {
+   public String interpretShot(String message) {
       String x = message.substring(0,0); 
       String y = message.substring(2, 2);
       String resultString;
@@ -243,5 +121,12 @@ import java.net.UnknownHostException;
 
    }
 
+   /**
+    * Method for the controller to interpret the results of the shot message
+    */
+
+    public void interpretResult(String message) {
+
+    }
 
  }

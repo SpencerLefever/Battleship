@@ -16,7 +16,7 @@
         // }
 
         BattleshipModel model = new BattleshipModel();
-        BattleshipView view = new BattleshipView();
+        BattleshipView view = new BattleshipView(model);
         BattleshipController controller = new BattleshipController(model, view, args[0], "");
 
         controller.playGame();

@@ -1,112 +1,184 @@
-/**
- * Spencer Lefever
- * COSC330 Project 1 Battleship
- * 
- * Battleship view class
- * for the Battleship game
- * using the MVC design pattern
- * 
- * For now this is just a simple view with a text
- * box to input the coordinates to send
- */
 
-import java.util.ArrayList;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
 
+public class BattleshipView extends JFrame {
+        //private battleshipModel gridModel;
 
-//  public class BattleshipView implements Subject{
- public class BattleshipView implements Subject {
+        final int GRID_LENGTH = 10;
+        final int GRID_WIDTH = 10;
 
-    private ArrayList<Observer> observers;
-    //Variable to hold message being sent across the network
-    private String message;
-
-    private JFrame mainFrame;
-    // private JTextField inputField;
-    // private JTextArea displayField;
-
-    public InputView inputField;
-    public OutputView displayField;
+        private BattleshipModel battleshipModel;
+        
+        private JButton quitButton = new JButton("Quit");
+        private JButton restartButton = new JButton("Restart");
+        private JButton fireButton = new JButton("Fire");
+        private JButton randomButton = new JButton("Randomize");
+        private JButton confirmButton = new JButton("Confirm");
+        private JPanel oceanGrid = new JPanel();
+        private JPanel targetGrid = new JPanel();
+        private JPanel gridPanel;
+        private JPanel buttonPanel;
+        private JPanel shipContainer = new JPanel();
+        private JPanel shipSelectionPanel = new JPanel();
+        private JComboBox<String> shipSelection;
+        private ImageIcon shipIcon;
+        private JLabel shipLabel;
+        private JRadioButton [][] oceanGridButtonArr = new JRadioButton[GRID_LENGTH][GRID_WIDTH];
+        private JRadioButton [][] targetGridButtonArr = new JRadioButton[GRID_LENGTH][GRID_WIDTH];
 
 
+        public BattleshipView(BattleshipModel m){
 
-    public BattleshipView() {
-        this.observers = new ArrayList<>();
-        // inputField = new InputView(this);
-        // displayField = new OutputView(this);
-        setInputField();
-        setDisplayField();
+                battleshipModel = m;
+                //Set size of frame
+                setSize(750,1000);
+                //Set main frame to border layout
+                setLayout(new BorderLayout(50, 50));
 
-        mainFrame = new JFrame("Battleship");
+                initShipSelectionPanel();
 
+                initOceanGridButtonArr();
 
-        this.setInputField();
-        mainFrame.add(inputField, BorderLayout.NORTH);
+                initTargetGridButtonArr();
 
-        this.setDisplayField();
-        mainFrame.add( new JScrollPane(displayField) , BorderLayout.CENTER);
+                initTargetGridPanel();
 
-        mainFrame.setSize(300,150);
-        mainFrame.setVisible(true);
-    }
+                initOceanGridPanel();
 
-    //Subject interface methods
-    public void addObserver(Observer o) {
-        observers.add(o);
-    }
+                initGridPanel();
 
-    public void deleteObserver(Observer o) {
-        int i= observers.indexOf(o);
-        if(i>=0) {
-            observers.remove(i);
+                initButtonPanel();
+
+                addPanelsToMainFrame();
+            
+
+                // Finalize
+                pack();
+                setResizable(false);
+                setTitle("BattleShip");
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         }
-    }
 
-    public void notifyObserver(String message) {
-        for(Observer o: observers) {
-            o.update(message);
+        //Method to initialize JComboBox and ship icons for border layout
+        void initShipSelectionPanel() {
+            //Initialize JComboBox and values
+            String[] shipList = {"Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
+            shipSelection = new JComboBox<String>(shipList);
+            shipSelection.setVisible(true);
+
+            //Initialize ImageIcon to null value
+            shipIcon = new ImageIcon("src/battleship.png");
+            
+            shipLabel = new JLabel(shipIcon, JLabel.CENTER);
+            shipLabel.setVisible(true);
+
+            //Set layout for shipSelectionPanel
+            shipSelectionPanel.setLayout(new GridLayout(2,1,25,25));
+
+            //Add ship combo box and icon to the Ship selection panel
+            shipSelectionPanel.add(shipSelection);
+            shipSelectionPanel.add(shipLabel);
+
         }
-    }
 
-    //Getters and setters
-    public void setInputField() {
-        inputField = new InputView(this);
-        inputField.setEditable(true);
+        void initOceanGridButtonArr() {
+            //Initialize oceanGridButtonArr
+                for(int i = 0; i < GRID_LENGTH; i++) {
+                        for(int j=0; j< GRID_WIDTH; j++) {
+                                oceanGridButtonArr[i][j] = new JRadioButton();
+                        }
+                }  
+        }
 
-        inputField.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent event) {
-                    message = event.getActionCommand();
-                    inputField.setText("");
+        void initTargetGridButtonArr() {
+             //Initialize targetGridButtonArr
+                for(int i = 0; i < GRID_LENGTH; i++) {
+                        for(int j=0; j< GRID_WIDTH; j++) {
+                               targetGridButtonArr[i][j] = new JRadioButton();
+                        }
+                }           
+        }
+
+        void initGridPanel() {
+            // Layout Components
+            gridPanel = new JPanel();
+
+            //Add components to grid panel
+            gridPanel.setLayout(new GridLayout(2, 1, 50, 50));
+                
+            //Add grid to the grid panel
+            gridPanel.add(oceanGrid);
+            gridPanel.add(targetGrid);                
+            
+            gridPanel.setVisible(true);
+        }
+
+        void initOceanGridPanel() {
+            final int buttonSpacer = 5;
+            //Set ocean and target grid panels to grid layout
+            oceanGrid.setLayout(new GridLayout(GRID_LENGTH, GRID_WIDTH, buttonSpacer, buttonSpacer));
+             //Add buttons to ocean grid panel
+                for(int i = 0; i < GRID_LENGTH; i++) {
+                        for(int j=0; j< GRID_WIDTH; j++) {
+                                oceanGrid.add(oceanGridButtonArr[i][j]);
+                                oceanGridButtonArr[i][j].setMaximumSize(new Dimension(5,5));
+                        }
                 }
-            }
-        );
-    }
+                oceanGrid.setVisible(true);
+        }
 
-    public JTextField getInputField () {
-        return inputField;
-    }
+        void initTargetGridPanel() {
+            final int buttonSpacer = 5;
 
-    public void setDisplayField() {
-        displayField = new OutputView(this);
-    }
-    
-    public JTextArea getDisplayField() {
-        return displayField;
-    }
+            targetGrid.setLayout(new GridLayout(GRID_LENGTH, GRID_WIDTH, buttonSpacer, buttonSpacer));
 
-    public String sendData(String message) {
-        return message;
-    }
- }
+
+             //Add buttons to target grid panel
+                for(int i = 0; i < GRID_LENGTH; i++) {
+                        for(int j=0; j< GRID_WIDTH; j++) {
+                               targetGrid.add(targetGridButtonArr[i][j]);
+                               targetGridButtonArr[i][j].setMaximumSize(new Dimension(5,5));
+                        }
+                }
+                targetGrid.setVisible(true);
+        }
+
+        void initButtonPanel() {
+            buttonPanel = new JPanel();
+                
+                
+            //Add components to button panel
+            buttonPanel.setLayout(new GridLayout(1,3,25,25));
+            buttonPanel.add(fireButton);
+            buttonPanel.add(confirmButton);
+            buttonPanel.add(restartButton);
+        }
+
+        void addPanelsToMainFrame() {
+                //Add panels to main frame
+                add(buttonPanel, BorderLayout.PAGE_END);
+                add(gridPanel, BorderLayout.CENTER);
+                add(shipSelectionPanel, BorderLayout.EAST);
+                
+        }
+
+        // Add listeners
+        void addRestartListener(ActionListener r){
+                restartButton.addActionListener(r);
+        }
+
+        void addFireListener(ActionListener f){
+                fireButton.addActionListener(f);
+        }
+
+        void addConfirmListener(ActionListener c){
+                confirmButton.addActionListener(c);
+        }
+
+        
+
+}

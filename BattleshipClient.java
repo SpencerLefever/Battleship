@@ -39,7 +39,7 @@ public class BattleshipClient implements Role
     public void setup() {
         try {
             //Connect to server
-            connectToServer();
+            connect();
 
             //Get i/o streams
             getStreams();

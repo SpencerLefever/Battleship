@@ -43,7 +43,7 @@ public class BattleshipServer implements Role {
             try 
             {
                 //wait for connection
-                waitForConnection();
+                connect();
                 //get input and output streams
                 getStreams();
                 //process connection
