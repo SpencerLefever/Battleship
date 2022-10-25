@@ -25,9 +25,10 @@ import java.net.UnknownHostException;
 
    private Role networkRole;
 
-   public BattleshipController(BattleshipModel m, BattleshipView v, String roleString, String host) {
+   public BattleshipController(BattleshipModel m, BattleshipView v, String role, String host) {
+      roleString = role;
 
-      if(roleString == "server") {
+      if(roleString.equals("server")) {
          InetAddress ip;
 
          try {
@@ -39,12 +40,16 @@ import java.net.UnknownHostException;
          }
          networkRole = new BattleshipServer();
       }
-      else if(roleString == "client") {
+      else if(roleString.equals("client")) {
          networkRole = new BattleshipClient(host);
+      }
+      else {
+         System.out.println("Player must be server or client role");
+         UnknownHostException err = new UnknownHostException();
+         err.printStackTrace();
       }
       model = m;
       view = v;
-      this.roleString = roleString;
    }
 
    /**
@@ -68,6 +73,8 @@ import java.net.UnknownHostException;
 
 
       //TODO Establish network connection
+      networkRole.setup();
+
       try { 
          networkRole.connect();
       } catch (IOException ioException) {
@@ -139,7 +146,7 @@ import java.net.UnknownHostException;
    //Method for the server to shoot
    public void serverShot() throws IOException {
 
-      if(roleString == "server") {
+      if(roleString.equals("server")) {
          //Do while no input has been sent
          do {
             networkRole.getStreams();
@@ -149,7 +156,7 @@ import java.net.UnknownHostException;
 
          } while(!outputString.equals("SERVER>>> "));
          
-      } else if (roleString == "client") {
+      } else if (roleString.equals("client")) {
 
          do {
             networkRole.getStreams();
@@ -163,14 +170,14 @@ import java.net.UnknownHostException;
    //Method for the client to shoot
    public void clientShot() throws IOException {
 
-      if(roleString == "client") {
+      if(roleString.equals("client")) {
             networkRole.getStreams();
             networkRole.processConnection();
             outputString = networkRole.getOutputString();
             System.out.println("Printing output string " + outputString);  
 
          
-      } else if (roleString == "server") {
+      } else if (roleString.equals("server")) {
 
          //Dont allow Server to type in input field while it's the client's turn
          view.inputField.setEditable(false);
@@ -182,12 +189,12 @@ import java.net.UnknownHostException;
 
    //Method for the client to send the result to the server
    public void clientSendResutlt() throws IOException {
-      if(roleString == "client") {
+      if(roleString.equals("client")) {
          String message = interpretMessage(inputString);
          networkRole.sendData(message);
          
 
-      } else if (roleString == "server") {   //Wait to receive result if client
+      } else if (roleString.equals("server")) {   //Wait to receive result if client
          networkRole.getStreams();
          networkRole.processConnection();
          outputString = networkRole.getOutputString();
@@ -196,11 +203,11 @@ import java.net.UnknownHostException;
 
    //Method for the server to send the result of the shot to the client
    public void serverSendResult() throws IOException {
-      if(roleString == "server") {
+      if(roleString.equals("server")) {
          String message = interpretMessage(inputString);
          networkRole.sendData(message);
 
-      } else if (roleString == "client") {   //Wait to receive results if client
+      } else if (roleString.equals("client")) {   //Wait to receive results if client
          networkRole.getStreams();
          networkRole.processConnection();
          outputString = networkRole.getOutputString();
