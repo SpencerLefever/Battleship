@@ -99,8 +99,28 @@ public class BattleshipView extends JFrame {
                         for(int j=0; j< GRID_WIDTH; j++) {
                                targetGridButtonArr[i][j] = new JRadioButton();
                         }
+<<<<<<< HEAD
                 }           
         }
+=======
+                }
+                        
+                // Layout Components
+                JPanel gridPanel = new JPanel();
+                JPanel buttonPanel = new JPanel();
+                
+                
+                //Add components to button panel
+                buttonPanel.setLayout(new GridLayout(1,3,25,25));
+                buttonPanel.add(fireButton);
+                buttonPanel.add(confirmButton);
+		buttonPanel.add(restartButton);
+                
+                
+                //Add components to grid panel
+                gridPanel.setLayout(new GridLayout(2, 1, 50, 50));
+                
+>>>>>>> 1cec831c0fb91f4446023edb03343f8e4ad23386
 
         void initGridPanel() {
             // Layout Components
@@ -146,6 +166,7 @@ public class BattleshipView extends JFrame {
                 targetGrid.setVisible(true);
         }
 
+<<<<<<< HEAD
         void initButtonPanel() {
             buttonPanel = new JPanel();
                 
@@ -158,12 +179,34 @@ public class BattleshipView extends JFrame {
         }
 
         void addPanelsToMainFrame() {
+=======
+                //Add grid to the grid panel
+                gridPanel.add(oceanGrid);
+                gridPanel.add(targetGrid);                
+                
+                gridPanel.setVisible(true);
+                        
+>>>>>>> 1cec831c0fb91f4446023edb03343f8e4ad23386
                 //Add panels to main frame
                 add(buttonPanel, BorderLayout.PAGE_END);
                 add(gridPanel, BorderLayout.CENTER);
                 add(shipSelectionPanel, BorderLayout.EAST);
                 
+<<<<<<< HEAD
         }
+=======
+        
+
+                // Finalize
+                pack();
+                setResizable(false);
+                setTitle("BattleShip");
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        }
+        
+        // Add listeners
+>>>>>>> 1cec831c0fb91f4446023edb03343f8e4ad23386
 
         // Add listeners
         void addRestartListener(ActionListener r){
