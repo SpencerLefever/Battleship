@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class BattleshipView extends JFrame {
-        private BattleshipModel gridModel;
+        //private battleshipModel gridModel;
 
         final int GRID_LENGTH = 10;
         final int GRID_WIDTH = 10;
@@ -151,6 +151,7 @@ public class BattleshipView extends JFrame {
                 for(int i = 0; i < GRID_LENGTH; i++) {
                         for(int j=0; j< GRID_WIDTH; j++) {
                                 oceanGridButtonArr[i][j] = new JButton();
+                                oceanGridButtonArr[i][j].setPreferredSize(new Dimension(10,10));
                         }
                 }  
         }
@@ -160,6 +161,7 @@ public class BattleshipView extends JFrame {
                 for(int i = 0; i < GRID_LENGTH; i++) {
                         for(int j=0; j< GRID_WIDTH; j++) {
                                targetGridButtonArr[i][j] = new JToggleButton();
+                               targetGridButtonArr[i][j].setPreferredSize(new Dimension(10,10));
                         }
 
                 }           
@@ -226,7 +228,7 @@ public class BattleshipView extends JFrame {
             blank.setEditable(false);
             blank.setVisible(true);
             //Set ocean and target grid panels to grid layout
-            oceanGrid.setLayout(new GridLayout(GRID_LENGTH + 1, GRID_WIDTH + 1, buttonSpacer, buttonSpacer));
+            oceanGrid.setLayout(new GridLayout(GRID_LENGTH+1, GRID_WIDTH+1, buttonSpacer, buttonSpacer));
 
             //Add blank space in corner of grid
             oceanGrid.add(blank);
@@ -239,10 +241,10 @@ public class BattleshipView extends JFrame {
                 for(int i = 0; i < GRID_LENGTH; i++) {
                     oceanGrid.add(gridSideStringsArr[i]);
                         for(int j=0; j< GRID_WIDTH; j++) {
-                                oceanGrid.add(oceanGridButtonArr[i][j]);
-                                oceanGridButtonArr[i][j].setMaximumSize(new Dimension(5,5));
+                              oceanGrid.add(oceanGridButtonArr[i][j]);
                         }
-                }
+
+                }       
                 oceanGrid.setVisible(true);
         }
 
@@ -270,7 +272,6 @@ public class BattleshipView extends JFrame {
                     targetGrid.add(gridSideStringsArr[i]);
                         for(int j=0; j< GRID_WIDTH; j++) {
                                targetGrid.add(targetGridButtonArr[i][j]);
-                               targetGridButtonArr[i][j].setMaximumSize(new Dimension(5,5));
                         }
                 }
                 targetGrid.setVisible(true);
