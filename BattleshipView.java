@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class BattleshipView extends JFrame {
-        //private battleshipModel gridModel;
+        private BattleshipModel gridModel;
 
         final int GRID_LENGTH = 10;
         final int GRID_WIDTH = 10;
@@ -25,8 +25,14 @@ public class BattleshipView extends JFrame {
         private JComboBox<String> shipSelection;
         private ImageIcon shipIcon;
         private JLabel shipLabel;
-        private JRadioButton [][] oceanGridButtonArr = new JRadioButton[GRID_LENGTH][GRID_WIDTH];
-        private JRadioButton [][] targetGridButtonArr = new JRadioButton[GRID_LENGTH][GRID_WIDTH];
+        public JToggleButton [][] oceanGridButtonArr = new JToggleButton[GRID_LENGTH][GRID_WIDTH];
+        public JToggleButton [][] targetGridButtonArr = new JToggleButton[GRID_LENGTH][GRID_WIDTH];
+
+        public ButtonGroup targetGridButtonGroup;
+        public ButtonGroup oceanGridButtonGroup;
+
+        String[] gridTopStrings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        String[] gridSideStrings = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
 
 
         public BattleshipView(BattleshipModel m){
@@ -44,6 +50,10 @@ public class BattleshipView extends JFrame {
                 initTargetGridButtonArr();
 
                 initTargetGridPanel();
+
+                initTargetGridButtonGroup();
+
+                initOceanGridButtonGroup();
 
                 initOceanGridPanel();
 
@@ -88,7 +98,7 @@ public class BattleshipView extends JFrame {
             //Initialize oceanGridButtonArr
                 for(int i = 0; i < GRID_LENGTH; i++) {
                         for(int j=0; j< GRID_WIDTH; j++) {
-                                oceanGridButtonArr[i][j] = new JRadioButton();
+                                oceanGridButtonArr[i][j] = new JToggleButton();
                         }
                 }  
         }
@@ -97,10 +107,30 @@ public class BattleshipView extends JFrame {
              //Initialize targetGridButtonArr
                 for(int i = 0; i < GRID_LENGTH; i++) {
                         for(int j=0; j< GRID_WIDTH; j++) {
-                               targetGridButtonArr[i][j] = new JRadioButton();
+                               targetGridButtonArr[i][j] = new JToggleButton();
                         }
 
                 }           
+        }
+
+        void initTargetGridButtonGroup() {
+                targetGridButtonGroup = new ButtonGroup();
+                for(int i = 0; i < GRID_LENGTH; i++) {
+                        for(int j=0; j< GRID_WIDTH; j++) {
+                               targetGridButtonGroup.add(targetGridButtonArr[i][j]);
+                        }
+
+                }       
+        }
+
+        void initOceanGridButtonGroup() {
+                oceanGridButtonGroup = new ButtonGroup();
+                for(int i = 0; i < GRID_LENGTH; i++) {
+                        for(int j=0; j< GRID_WIDTH; j++) {
+                              oceanGridButtonGroup.add(oceanGridButtonArr[i][j]);
+                        }
+
+                }       
         }
 
         void initGridPanel() {
@@ -120,9 +150,14 @@ public class BattleshipView extends JFrame {
         void initOceanGridPanel() {
             final int buttonSpacer = 5;
             //Set ocean and target grid panels to grid layout
-            oceanGrid.setLayout(new GridLayout(GRID_LENGTH, GRID_WIDTH, buttonSpacer, buttonSpacer));
+            oceanGrid.setLayout(new GridLayout(GRID_LENGTH + 1, GRID_WIDTH + 1, buttonSpacer, buttonSpacer));
              //Add buttons to ocean grid panel
+             for(int i = 0; i < GRID_LENGTH; i++){
+                JTextField f = new JTextField(gridTopStrings[i]);
+                oceanGrid.addComponent(f);
+             }
                 for(int i = 0; i < GRID_LENGTH; i++) {
+                        oceanGrid.addComponent(gridSideStrings[i]);
                         for(int j=0; j< GRID_WIDTH; j++) {
                                 oceanGrid.add(oceanGridButtonArr[i][j]);
                                 oceanGridButtonArr[i][j].setMaximumSize(new Dimension(5,5));
@@ -157,7 +192,28 @@ public class BattleshipView extends JFrame {
             buttonPanel.add(fireButton);
             buttonPanel.add(confirmButton);
             buttonPanel.add(restartButton);
+        
         }
+
+        void addFireListener(ActionListener f){
+                fireButton.addActionListener(f);
+         }
+
+         void addConfirmListener(ActionListener c){
+                confirmButton.addActionListener(c);
+         }
+
+         void addRestartListener(ActionListener r){
+                restartButton.addActionListener(r);
+         }
+
+         void addTargetButtonListener(ActionListener t) {
+                for(int i = 0; i < 10; i++) {
+                        for(int j=0; j< 10; j++) {
+                                targetGridButtonArr[i][j].addActionListener(t);
+                        }
+                }
+         }
 
         void addPanelsToMainFrame() {
                 //Add grid to the grid panel
@@ -172,21 +228,5 @@ public class BattleshipView extends JFrame {
                 add(shipSelectionPanel, BorderLayout.EAST);
                 
         }
-        
-
-        // Add listeners
-        void addRestartListener(ActionListener r){
-                restartButton.addActionListener(r);
-        }
-
-        void addFireListener(ActionListener f){
-                fireButton.addActionListener(f);
-        }
-
-        void addConfirmListener(ActionListener c){
-                confirmButton.addActionListener(c);
-        }
-
-        
 
 }
