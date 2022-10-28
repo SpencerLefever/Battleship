@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class BattleshipModel{
-    private Player p = new Player(10, 10);
+    public Player p = new Player(10, 10);
 
     public void fire(int x, int y){
         Shot s = new Shot(x, y);

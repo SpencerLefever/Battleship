@@ -89,6 +89,10 @@
         grid[x][y] = isHit;
     }
 
+    public void clearCell(int x, int y){
+        grid[x][y] = -1;
+    }
+
     /**
      * Method to get a single cell from the grid
      */

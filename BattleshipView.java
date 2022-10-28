@@ -16,8 +16,9 @@ public class BattleshipView extends JFrame {
         private JButton quitButton = new JButton("Quit");
         private JButton restartButton = new JButton("Restart");
         private JButton fireButton = new JButton("Fire");
-        private JButton randomButton = new JButton("Randomize");
-        private JButton confirmButton = new JButton("Confirm");
+        public JButton randomButton = new JButton("Randomize");
+        public JButton confirmButton = new JButton("Confirm");
+        private JButton confirmPlacementButton = new JButton("Confirm Placement");
         private JPanel buttonPanel;
 
         //JComponents related to the grids
@@ -74,6 +75,8 @@ public class BattleshipView extends JFrame {
                 initGameLogPanel();
 
                 addPanelsToMainFrame();
+
+                initIconImage();
             
 
                 // Finalize
@@ -154,6 +157,11 @@ public class BattleshipView extends JFrame {
                                 oceanGridButtonArr[i][j].setPreferredSize(new Dimension(10,10));
                         }
                 }  
+        }
+
+        void initIconImage(){
+            //Image ic = new Image("source/logo.png");
+            setIconImage(new ImageIcon("source/logo.png").getImage());
         }
 
         void initTargetGridButtonArr() {
@@ -286,7 +294,13 @@ public class BattleshipView extends JFrame {
             buttonPanel.setLayout(new GridLayout(1,3,25,25));
             buttonPanel.add(fireButton);
             buttonPanel.add(confirmButton);
-            buttonPanel.add(restartButton);
+            buttonPanel.add(restartButton);               // for(int i = 0; i < 10; i++) {
+                      //  for(int j=0; j< 10; j++) {
+                    //            targetGridButtonArr[i][j].addActionListener(t);
+                  //      }
+                //}
+            buttonPanel.add(randomButton);
+            //buttonPanel.add(confirmPlacementButton);
         
         }
 
@@ -300,6 +314,18 @@ public class BattleshipView extends JFrame {
 
          void addRestartListener(ActionListener r){
                 restartButton.addActionListener(r);
+         }
+
+         void addRandomListener(ActionListener r){
+                randomButton.addActionListener(r);
+         }
+
+         void addupdateGridListener(ActionListener u){
+                    for(int i = 0; i < 10; i++) {
+                        for(int j=0; j< 10; j++) {
+                                oceanGridButtonArr[i][j].addActionListener(u);
+                        }
+                }
          }
 
          void addTargetButtonListener(ActionListener t) {
