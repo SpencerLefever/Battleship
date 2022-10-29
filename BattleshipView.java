@@ -15,7 +15,7 @@ public class BattleshipView extends JFrame {
         //Buttons to put along bottom of screen
         private JButton quitButton = new JButton("Quit");
         private JButton restartButton = new JButton("Restart");
-        private JButton fireButton = new JButton("Fire");
+        public JButton fireButton = new JButton("Fire");
         public JButton randomButton = new JButton("Randomize");
         public JButton confirmButton = new JButton("Confirm");
         private JButton confirmPlacementButton = new JButton("Confirm Placement");
@@ -300,6 +300,7 @@ public class BattleshipView extends JFrame {
         void initButtonPanel() {
             buttonPanel = new JPanel();
                 
+            fireButton.setEnabled(false);
                 
             //Add components to button panel
             buttonPanel.setLayout(new GridLayout(1,3,25,25));
