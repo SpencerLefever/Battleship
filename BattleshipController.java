@@ -194,6 +194,7 @@ class TargetGridListener implements DocumentListener {
 
                     updateOceanGridView();
                     updateTargetGridView();
+                    view.gameLog.append("\n");
                     // try {
                     //     String message = networkRole.readData();
                     //     view.gameLog.append(message);
@@ -220,12 +221,14 @@ class TargetGridListener implements DocumentListener {
 class OceanGridListener implements DocumentListener {
 
     public void insertUpdate(DocumentEvent e) {
+       
          Runnable runnable = new Runnable() {
 
             public void run() {
 
                 updateTargetGridView();
                 updateOceanGridView();
+                view.gameLog.append("\n");
 
                 // try {
                 //     String message = networkRole.readData();
@@ -299,22 +302,22 @@ public void clearShipPlacement(){
 
 }
 
-public void updateGridView(){
-        for(int i = 0; i < 10; i++){
-            for(int j = 0; j < 10; j++){
-                if(model.p.shipGrid.getCell(i, j) == model.p.SHIP_GOOD){
-                    view.oceanGridButtonArr[i][j].setBackground(Color.BLACK);
-                }
-                if(model.p.shipGrid.getCell(i, j) == model.p.SHIP_HIT){
-                    view.oceanGridButtonArr[i][j].setBackground(Color.RED);
-                }
-                if(model.p.shipGrid.getCell(i, j) == model.p.NO_SHIP){
-                    view.oceanGridButtonArr[i][j].setBackground(Color.BLUE);
-                }               
+// public void updateGridView(){
+//         for(int i = 0; i < 10; i++){
+//             for(int j = 0; j < 10; j++){
+//                 if(model.p.shipGrid.getCell(i, j) == model.p.SHIP_GOOD){
+//                     view.oceanGridButtonArr[i][j].setBackground(Color.BLACK);
+//                 }
+//                 if(model.p.shipGrid.getCell(i, j) == model.p.SHIP_HIT){
+//                     view.oceanGridButtonArr[i][j].setBackground(Color.RED);
+//                 }
+//                 if(model.p.shipGrid.getCell(i, j) == model.p.NO_SHIP){
+//                     view.oceanGridButtonArr[i][j].setBackground(Color.BLUE);
+//                 }               
                 
-            }
-        }
-}
+//             }
+//         }
+// }
 
 public void updateOceanGridView() {
     for(int i = 0; i < 10; i++){
@@ -430,7 +433,7 @@ void playGameServer() {
         System.out.println("Result Message: " + resultMessage);
         //resultMessage = checkShot(networkRole.readData());
         networkRole.sendData(resultMessage);
-        view.gameLog.append(resultMessage);
+        //view.gameLog.append(resultMessage);
         updateOceanGridView();
         updateTargetGridView();
     }
@@ -447,15 +450,16 @@ void playGameServer() {
     try {
         resultMessage = checkShot(shotMessage);
         networkRole.sendData(resultMessage);
-        view.gameLog.append(resultMessage);
+        //view.gameLog.append(resultMessage);
     }
     catch (IOException e) {
         e.printStackTrace();
     }
 
+    //Reset boolean values for next turn
     shotSentServer = false;
-    shotReceivedClient = false;
     shotReceivedServer = false;
+    resultReceivedServer = false;
 }
 
 
@@ -482,8 +486,9 @@ void playGameClient() {
         resultMessage = checkShot(shotMessage);
         System.out.println("Sending results to opponent " + resultMessage);
         networkRole.sendData(resultMessage);
-        view.gameLog.append(resultMessage);
         //view.gameLog.append(resultMessage);
+        updateOceanGridView();
+        updateTargetGridView();
     }
     catch (IOException e) {
         e.printStackTrace();
@@ -503,7 +508,7 @@ void playGameClient() {
         System.out.println("Result Message: " + resultMessage);
         //resultMessage = checkShot(resultMessage);
         networkRole.sendData(resultMessage);
-        view.gameLog.append(resultMessage);
+        //view.gameLog.append(resultMessage);
         updateOceanGridView();
         updateTargetGridView();
         //view.gameLog.append(resultMessage);
@@ -512,10 +517,10 @@ void playGameClient() {
         e.printStackTrace();
     }
 
+    //Reset boolean values for next turn
     shotSentClient = false;
     shotReceivedClient = false;
     resultReceivedClient = false;
-
 }
 
 //Wait until the message has been update to a coordinate message
@@ -524,12 +529,16 @@ String waitForOpponentShotMessage() {
 
     try {
         String message = networkRole.readData();
+        System.out.println("Opponent shot message inside wait " + message);
 
-        if(message.length() > 0) {     
+        if(message.length() > 0 && message.length() > 14) {     
             //Check if message is the shot message
             if(message.substring(10, 20).equalsIgnoreCase("Shot fired")) {
                 System.out.println("Message detected " + message.substring(20,30));
-                //view.gameLog.append(message);
+                
+                //Append message to game log history
+                view.gameLog.append(message);
+                
                 if(networkRoleString.equalsIgnoreCase("server")) {
                     shotReceivedServer = true;
                 }
@@ -558,6 +567,9 @@ String waitForOpponentResultMessage() {
             //Check if message is the shot message
             if(message.substring(10, 14).equalsIgnoreCase("HIT ") || message.substring(10, 14).equalsIgnoreCase("MISS")) {
                 System.out.println("Result Message Received!! " + message.substring(10, 14));
+
+                //Append the result message to the chat log
+                view.gameLog.append(message);
 
                 if(networkRoleString.equalsIgnoreCase("server")) {
                     resultReceivedServer = true;
@@ -609,4 +621,3 @@ String checkShot(String message) {
 }
 
 }
-
