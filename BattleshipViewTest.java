@@ -5,7 +5,9 @@
 
  public class BattleshipViewTest {
     public static void main(String[] args) {
-        BattleshipView view = new BattleshipView();
+        BattleshipModel m = new BattleshipModel();
+        BattleshipView view = new BattleshipView(m);
+        BattleshipController c = new BattleshipController(m, view);
 
         view.setVisible(true);
     }

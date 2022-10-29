@@ -38,9 +38,9 @@ public class BattleshipView extends JFrame {
         //JComponents related to ship selection panel
         private JPanel shipContainer = new JPanel();
         private JPanel shipSelectionPanel = new JPanel();
-        private JComboBox<String> shipSelection;
+        public JComboBox<String> shipSelection;
         private ImageIcon shipIcon;
-        private JLabel shipLabel;
+        public JLabel shipLabel;
 
         //JComponents related to header
         private JPanel headerPanel;
@@ -146,20 +146,22 @@ public class BattleshipView extends JFrame {
             //Initialize JComboBox and values
             String[] shipList = {"Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
             shipSelection = new JComboBox<String>(shipList);
+
             shipSelection.setVisible(true);
 
             // //Initialize ImageIcon to null value
             // shipIcon = new ImageIcon("src/battleship.png");
             
-            // shipLabel = new JLabel(shipIcon, JLabel.CENTER);
-            //shipLabel.setVisible(true);
+            shipLabel = new JLabel();
+            shipLabel.setVisible(true);
+            //shipLabel.setLayout(new FlowLayout());
 
             //Set layout for shipSelectionPanel
             shipSelectionPanel.setLayout(new GridLayout(2,1,25,25));
 
             //Add ship combo box and icon to the Ship selection panel
             shipSelectionPanel.add(shipSelection);
-            //shipSelectionPanel.add(shipLabel);
+            shipSelectionPanel.add(shipLabel);
 
         }
 
@@ -327,6 +329,10 @@ public class BattleshipView extends JFrame {
 
          void addRandomListener(ActionListener r){
                 randomButton.addActionListener(r);
+         }
+
+         void addShipSelectionListener(ItemListener s){
+                shipSelection.addItemListener(s);
          }
 
 

@@ -38,6 +38,7 @@ public class BattleshipController{
         view.addRandomListener(new RandomListener());
         view.addTargetGridListener(new TargetGridListener());
         view.addOceanGridListener(new OceanGridListener());
+        view.addShipSelectionListener(new ShipSelectionListener());
         // view.addTargetButtonListener(new TargetButtonListener());
         // view.addupdateGridListener(new updateGridListener());        
         view.setVisible(true);
@@ -100,6 +101,85 @@ class RandomListener implements ActionListener {
         updateOceanGridView();
     }
 }
+
+class ShipSelectionListener implements ItemListener {
+    public void itemStateChanged(ItemEvent e){
+        Object selected = e.getItem();
+        
+        switch(selected.toString()){
+            case "Carrier":
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                    System.out.println("Carrier");
+                    view.shipLabel.setLayout(new GridLayout(5,1,view.buttonSpacer,view.buttonSpacer));
+                    initShipButtonArr(5);
+                }
+
+                   if(e.getStateChange() == ItemEvent.DESELECTED){
+                    view.shipLabel.removeAll();
+                }
+                
+                break;
+
+            case "Battleship":
+           // System.out.println("Battleship");
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                    System.out.println("Battleship");
+                    view.shipLabel.setLayout(new GridLayout(4,1,view.buttonSpacer,view.buttonSpacer));
+                    initShipButtonArr(4);
+                }
+
+                if(e.getStateChange() == ItemEvent.DESELECTED){
+                    System.out.println("Battleship deselected");
+                    view.shipLabel.removeAll();
+                }
+
+                break;
+
+            case "Cruiser":
+            System.out.println("Carrier");
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                    view.shipLabel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
+                    initShipButtonArr(3);
+                }
+
+                   if(e.getStateChange() == ItemEvent.DESELECTED){
+                    view.shipLabel.removeAll();
+                }
+
+                break;
+
+            case "Submarine":
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                    view.shipLabel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
+                    initShipButtonArr(3);
+                }
+
+                   if(e.getStateChange() == ItemEvent.DESELECTED){
+                    view.shipLabel.removeAll();
+                }
+
+                break;
+
+            case "Destroyer":
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                    view.shipLabel.setLayout(new GridLayout(2,1,view.buttonSpacer,view.buttonSpacer));
+                    initShipButtonArr(2);
+                }
+
+                   if(e.getStateChange() == ItemEvent.DESELECTED){
+                    view.shipLabel.removeAll();
+                }
+
+                break;
+
+            default:
+        }
+
+        
+    }
+}
+
+
 
 //Target and Ocean grid are Document Listeners because they listen to the game log for changes
 //Only insertUpdate method is needed because only new message will be inserted to game log
@@ -181,7 +261,7 @@ class TargetButtonListener implements ActionListener{
 */
 
 /*
-class updateGridListener implements ActionListener{
+class updateGridListener implements ActionListener{if(e.getStateChange() == ItemEvent.SELECTED){
     public void actionPerformed(ActionEvent e){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
@@ -193,6 +273,19 @@ class updateGridListener implements ActionListener{
     }
 }
 */
+
+public void initShipButtonArr(int shipSize){
+    JButton [] shipButtonArr = new JButton[shipSize];
+
+    //view.shipLabel.removeAll();
+
+    for(int i = 0; i < shipSize; i++){
+        shipButtonArr[i] = new JButton();
+        shipButtonArr[i].setMaximumSize(new Dimension(10, 10));
+
+        view.shipLabel.add(shipButtonArr[i]);
+    }
+}
 
 public void clearShipPlacement(){
         for(int i = 0; i < 10; i++){
