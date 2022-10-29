@@ -17,6 +17,7 @@ public class BattleshipController{
     private boolean shotReceivedClient = false;
     private boolean resultReceivedServer = false;
     private boolean resultReceivedClient = false;
+    private String currentShip;
 
     BattleshipController(BattleshipModel m, BattleshipView v, String networkRoleString, String ip){
         view = v;
@@ -109,6 +110,7 @@ class ShipSelectionListener implements ItemListener {
         
         switch(selected.toString()){
             case "Carrier":
+                currentShip = "Carrier";
                 if(e.getStateChange() == ItemEvent.SELECTED){
                     System.out.println("Carrier");
                     view.shipLabel.setLayout(new GridLayout(5,1,view.buttonSpacer,view.buttonSpacer));
@@ -123,6 +125,7 @@ class ShipSelectionListener implements ItemListener {
 
             case "Battleship":
            // System.out.println("Battleship");
+                currentShip = "Battleship";
                 if(e.getStateChange() == ItemEvent.SELECTED){
                     System.out.println("Battleship");
                     view.shipLabel.setLayout(new GridLayout(4,1,view.buttonSpacer,view.buttonSpacer));
@@ -137,7 +140,8 @@ class ShipSelectionListener implements ItemListener {
                 break;
 
             case "Cruiser":
-            System.out.println("Carrier");
+                currentShip = "Cruiser";
+            //System.out.println("Carrier");
                 if(e.getStateChange() == ItemEvent.SELECTED){
                     view.shipLabel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
                     initShipButtonArr(3);
@@ -150,6 +154,7 @@ class ShipSelectionListener implements ItemListener {
                 break;
 
             case "Submarine":
+                currentShip = "Submarine";
                 if(e.getStateChange() == ItemEvent.SELECTED){
                     view.shipLabel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
                     initShipButtonArr(3);
@@ -162,6 +167,7 @@ class ShipSelectionListener implements ItemListener {
                 break;
 
             case "Destroyer":
+                currentShip = "Destroyer";
                 if(e.getStateChange() == ItemEvent.SELECTED){
                     view.shipLabel.setLayout(new GridLayout(2,1,view.buttonSpacer,view.buttonSpacer));
                     initShipButtonArr(2);
@@ -250,6 +256,56 @@ class OceanGridListener implements DocumentListener {
     public void changedUpdate(DocumentEvent e) { }
 
 }
+
+class OceanGridButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent e){
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; i < 10; j++){
+                if(view.oceanGridButtonArr[i][j].isSelected()){
+                    switch(currentShip){
+                        case "Carrier":
+                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[0]);
+                            updateOceanGridView();
+                        
+                        break;
+
+                        case "Battleship":
+                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[1]);
+                            updateOceanGridView();
+
+                        break;
+                        
+                        case "Cruiser":
+                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[2]);
+                            updateOceanGridView();
+
+                        break;
+
+                        case "Submarine":
+                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[3]);
+                            updateOceanGridView();
+
+                        break;
+
+                        case "Destroyer":
+                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[1]);
+                            updateOceanGridView();
+
+                        break;
+
+                        default:
+
+                    }
+                            
+                    
+                
+                    }
+                }
+                
+            }
+        }
+    }
+
 
 
 

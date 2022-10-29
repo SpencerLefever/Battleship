@@ -49,7 +49,7 @@
    //Create grids and array of ships for player
     public Grid targetGrid;
     public Grid shipGrid;
-    private Ship[] shipArr = new Ship[NUM_SHIPS];
+    public Ship[] shipArr = new Ship[NUM_SHIPS];
     
     public Player(int length, int width) {
         //Initialize grids
