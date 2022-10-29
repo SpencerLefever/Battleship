@@ -112,14 +112,16 @@ class TargetGridListener implements DocumentListener {
             Runnable runnable = new Runnable() {
                 public void run() {
 
-                    try {
-                        String message = networkRole.readData();
-                        view.gameLog.append(message);
-                        updateOceanGridView();
-                        updateTargetGridView();
-                    } catch (IOException err) {
-                        err.printStackTrace();
-                    }
+                    updateOceanGridView();
+                    updateTargetGridView();
+                    // try {
+                    //     String message = networkRole.readData();
+                    //     view.gameLog.append(message);
+                    //     updateOceanGridView();
+                    //     updateTargetGridView();
+                    // } catch (IOException err) {
+                    //     err.printStackTrace();
+                    // }
                 }
             };
             SwingUtilities.invokeLater(runnable);           
@@ -142,14 +144,18 @@ class OceanGridListener implements DocumentListener {
 
             public void run() {
 
-                try {
-                    String message = networkRole.readData();
-                    view.gameLog.append(message);
-                    updateTargetGridView();
-                    updateOceanGridView();
-                } catch (IOException err) {
-                    err.printStackTrace();
-                }
+                updateTargetGridView();
+                updateOceanGridView();
+
+                // try {
+                //     String message = networkRole.readData();
+                //     view.gameLog.append(message);
+                //     updateTargetGridView();
+                //     updateOceanGridView();
+                // } catch (IOException err) {
+                //     err.printStackTrace();
+                // }
+
             }
         };
         SwingUtilities.invokeLater(runnable);         
@@ -430,6 +436,7 @@ String waitForOpponentShotMessage() {
             //Check if message is the shot message
             if(message.substring(10, 20).equalsIgnoreCase("Shot fired")) {
                 System.out.println("Message detected " + message.substring(20,30));
+                //view.gameLog.append(message);
                 if(networkRoleString.equalsIgnoreCase("server")) {
                     shotReceivedServer = true;
                 }
@@ -456,8 +463,8 @@ String waitForOpponentResultMessage() {
         if(message.length() > 0) {
         
             //Check if message is the shot message
-            if(message.substring(10, 15).equalsIgnoreCase("HIT ") || message.substring(10, 15).equalsIgnoreCase("MISS")) {
-                System.out.println("Result Message Received!! " + message.substring(10, 15));
+            if(message.substring(10, 14).equalsIgnoreCase("HIT ") || message.substring(10, 14).equalsIgnoreCase("MISS")) {
+                System.out.println("Result Message Received!! " + message.substring(10, 14));
 
                 if(networkRoleString.equalsIgnoreCase("server")) {
                     resultReceivedServer = true;
@@ -465,7 +472,7 @@ String waitForOpponentResultMessage() {
                 if(networkRoleString.equalsIgnoreCase("client")) {
                     resultReceivedClient = true;
                 }
-                return message.substring(10,15);
+                return message.substring(10,14);
             }
             
         }
@@ -494,12 +501,12 @@ String checkShot(String message) {
 
     if(model.p.shipGrid.getCell(xCoord, yCoord) == model.p.NO_SHIP) {
         System.out.println("Shot missed");
-       resultString = "MISS";
+       resultString = "MISS\n";
        //model.p.shipGrid.setCell(xCoord, yCoord, model.p.SHIP_GOOD);
        return resultString;
     } else if (model.p.shipGrid.getCell(xCoord, yCoord) == model.p.SHIP_GOOD) {
         System.out.println("Shot hit");
-       resultString = "HIT ";
+       resultString = "HIT \n";
        model.p.shipGrid.setCell(xCoord, yCoord, model.p.SHIP_HIT);
        return resultString;
     } else {
