@@ -85,7 +85,7 @@ class ConfirmListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
         view.randomButton.setEnabled(false);
         view.confirmButton.setEnabled(false);
-        view.fireButton.sentEnabled(true);
+        view.fireButton.setEnabled(true);
     }
 }
 
