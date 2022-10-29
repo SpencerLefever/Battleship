@@ -196,8 +196,6 @@
             //Update ship array to true values for ship
             setShip(shipGrid.getGrid(), shipArr[i]);
 
-            // System.out.println("Ship Grid after ship placement " + (i+1) + "\n");
-            // shipGrid.printGrid();
         }
     }
 

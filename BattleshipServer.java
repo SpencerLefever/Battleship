@@ -34,13 +34,11 @@ import java.io.IOException;
     }
 
     public void sendData(String message) throws IOException {
-        System.out.println("SERVER>>> " + message);
         out.println("SERVER>>> " + message);
     }
 
     public String readData() throws IOException {
         String message = in.readLine();
-        System.out.println(message);
         return message;
     }
 
