@@ -47,8 +47,8 @@
 
 
    //Create grids and array of ships for player
-    private Grid targetGrid;
-    private Grid shipGrid;
+    public Grid targetGrid;
+    public Grid shipGrid;
     private Ship[] shipArr = new Ship[NUM_SHIPS];
     
     public Player(int length, int width) {
@@ -196,8 +196,8 @@
             //Update ship array to true values for ship
             setShip(shipGrid.getGrid(), shipArr[i]);
 
-            System.out.println("Ship Grid after ship placement " + (i+1) + "\n");
-            shipGrid.printGrid();
+            // System.out.println("Ship Grid after ship placement " + (i+1) + "\n");
+            // shipGrid.printGrid();
         }
     }
 

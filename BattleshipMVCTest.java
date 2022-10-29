@@ -16,8 +16,10 @@ public class BattleshipMVCTest {
         // }
 
         BattleshipModel model = new BattleshipModel();
-        BattleshipView view = new BattleshipView(model);
-        BattleshipController controller = new BattleshipController(model, view);
+        BattleshipView view = new BattleshipView(model, args[0]);
+        BattleshipController controller = new BattleshipController(model, view, args[0], args[1]);
+
+        controller.playGame();
 
         //controller.playGame();
     }

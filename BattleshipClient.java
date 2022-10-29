@@ -26,13 +26,14 @@ import java.io.IOException;
 
     public void openConnection(int port) throws IOException {
         //THIS InetAddress.getLocalHost() could cause errors when connecting across the network
+        System.out.println("Attempting to connect to server");
         clientSocket = new Socket(InetAddress.getLocalHost(), port);
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
     public void sendData(String message) throws IOException {
-        out.println(message);
+        out.println("CLIENT>>> " + message);
     }
 
     public String readData() throws IOException {

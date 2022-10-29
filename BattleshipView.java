@@ -48,15 +48,16 @@ public class BattleshipView extends JFrame {
        
 
         //JComponents realted to game chat log
-        private JTextArea gameLog;
+        private JTextField gameLogHeader;
+        public JTextArea gameLog;
         private JPanel gameLogPanel;        
 
 
-        public BattleshipView(BattleshipModel m){
+        public BattleshipView(BattleshipModel m, String networkRoleString){
 
                 battleshipModel = m;
                 //Set size of frame
-                setSize(750,1000);
+                setSize(new Dimension(1500, 1500));
                 //Set main frame to border layout
                 setLayout(new BorderLayout(25, 25));
 
@@ -81,8 +82,8 @@ public class BattleshipView extends JFrame {
 
                 // Finalize
                 pack();
-                setResizable(false);
-                setTitle("Battleship");
+                setResizable(true);
+                setTitle("Battleship " + networkRoleString);
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         }
@@ -116,16 +117,29 @@ public class BattleshipView extends JFrame {
         }
 
         void initGameLogPanel() {
+            //Initalize panel and set border
             gameLogPanel = new JPanel();
             gameLogPanel.setVisible(true);
+            gameLogPanel.setLayout(new GridLayout(2,1,0,0));
 
-            gameLog = new JTextArea("Move History");
+            //Initialize header
+            gameLogHeader = new JTextField("Move History");
+            gameLogHeader.setVisible(true);
+            gameLogHeader.setEditable(false);
+
+            //Initialize game log
+            gameLog = new JTextArea();
             gameLog.setVisible(true);
             gameLog.setEditable(false);
 
+            gameLogPanel.add(gameLogHeader);
             gameLogPanel.add(gameLog);
         }
 
+        void initIconImage(){
+            //Image ic = new Image("source/logo.png");
+            setIconImage(new ImageIcon("source/logo.png").getImage());
+        }
 
         //Method to initialize JComboBox and ship icons for border layout
         void initShipSelectionPanel() {
@@ -157,11 +171,6 @@ public class BattleshipView extends JFrame {
                                 oceanGridButtonArr[i][j].setPreferredSize(new Dimension(10,10));
                         }
                 }  
-        }
-
-        void initIconImage(){
-            //Image ic = new Image("source/logo.png");
-            setIconImage(new ImageIcon("source/logo.png").getImage());
         }
 
         void initTargetGridButtonArr() {
@@ -320,6 +329,19 @@ public class BattleshipView extends JFrame {
                 randomButton.addActionListener(r);
          }
 
+
+         //TODO Figure out how to update grid after player sends a shot back
+         void addTargetGridListener(DocumentListener a) {
+            //Add the action listener to the JText area holding history of shots
+            gameLog.getDocument().addDocumentListener(a);
+         }
+
+         void addOceanGridListener(DocumentListener a) {
+            //Add the action listener to the JText area holding history of shots
+            gameLog.getDocument().addDocumentListener(a);
+         }
+
+
          void addupdateGridListener(ActionListener u){
                     for(int i = 0; i < 10; i++) {
                         for(int j=0; j< 10; j++) {
@@ -328,13 +350,13 @@ public class BattleshipView extends JFrame {
                 }
          }
 
-         void addTargetButtonListener(ActionListener t) {
-                for(int i = 0; i < 10; i++) {
-                        for(int j=0; j< 10; j++) {
-                                targetGridButtonArr[i][j].addActionListener(t);
-                        }
-                }
-         }
+        //  void addTargetButtonListener(ActionListener t) {
+        //         for(int i = 0; i < 10; i++) {
+        //                 for(int j=0; j< 10; j++) {
+        //                         targetGridButtonArr[i][j].addActionListener(t);
+        //                 }
+        //         }
+        //  }
 
         void addPanelsToMainFrame() {
                 //Add grid to the grid panel

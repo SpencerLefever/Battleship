@@ -26,6 +26,7 @@ import java.io.IOException;
 
 
     public void openConnection(int port) throws IOException {
+        System.out.println("Waiting for client to connect");
         serverSocket = new ServerSocket(port, 100);
         clientSocket = serverSocket.accept();
         out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -33,8 +34,8 @@ import java.io.IOException;
     }
 
     public void sendData(String message) throws IOException {
-        System.out.println(message);
-        out.println(message);
+        System.out.println("SERVER>>> " + message);
+        out.println("SERVER>>> " + message);
     }
 
     public String readData() throws IOException {
