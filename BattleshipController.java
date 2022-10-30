@@ -17,6 +17,11 @@ public class BattleshipController{
     private boolean shotReceivedClient = false;
     private boolean resultReceivedServer = false;
     private boolean resultReceivedClient = false;
+    private boolean cruiserPlaced = false;
+    private boolean battleshipPlaced = false;
+    private boolean submarinePlaced = false;
+    private boolean carrierPlaced = false;
+    private boolean destroyerPlaced = false;
     private String currentShip;
 
     BattleshipController(BattleshipModel m, BattleshipView v, String networkRoleString, String ip, String port){
@@ -103,11 +108,6 @@ class ConfirmListener implements ActionListener{
     }
 }
 
-boolean cruiserPlaced = false;
-boolean battleshipPlaced = false;
-boolean submarinePlaced = false;
-boolean carrierPlaced = false;
-boolean destroyerPlaced = false;
 
 class ConfirmShipListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
@@ -139,6 +139,10 @@ class ConfirmShipListener implements ActionListener{
         if(destroyerPlaced) {
                 view.shipSelectionButtonArr[4].setEnabled(false);
          }
+
+         if(cruiserPlaced && battleshipPlaced && submarinePlaced && destroyerPlaced && carrierPlaced){
+            view.confirmButton.setEnabled(true);
+        }
     }
 }
 
@@ -151,6 +155,18 @@ class RandomListener implements ActionListener {
         for(int i = 0; i < 5; i++){
             view.shipSelectionButtonArr[i].setEnabled(false);
         }
+
+        carrierPlaced = true;
+        submarinePlaced = true;
+        battleshipPlaced = true;
+        destroyerPlaced = true;
+        cruiserPlaced = true;
+
+        if(cruiserPlaced && battleshipPlaced && submarinePlaced && destroyerPlaced && carrierPlaced){
+            view.confirmButton.setEnabled(true);
+        }
+
+        view.confirmShipButton.setEnabled(false);
     }
 }
 

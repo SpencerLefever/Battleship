@@ -18,7 +18,7 @@ public class BattleshipView extends JFrame {
         public JButton fireButton = new JButton("Fire");
         public JButton randomButton = new JButton("Randomize");
         public JButton confirmButton = new JButton("Confirm Grid");
-        public JButton confirmPlacementButton = new JButton("Confirm Placement");
+        //public JButton confirmPlacementButton = new JButton("Confirm Placement");
         private JPanel buttonPanel;
 
         //JComponents related to the grids
@@ -323,6 +323,7 @@ public class BattleshipView extends JFrame {
             buttonPanel = new JPanel();
                 
             fireButton.setEnabled(false);
+            confirmButton.setEnabled(false);
                 
             //Add components to button panel
             buttonPanel.setLayout(new GridLayout(1,3,25,25));
