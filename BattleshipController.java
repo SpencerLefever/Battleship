@@ -19,17 +19,17 @@ public class BattleshipController{
     private boolean resultReceivedClient = false;
     private String currentShip;
 
-    BattleshipController(BattleshipModel m, BattleshipView v, String networkRoleString, String ip){
+    BattleshipController(BattleshipModel m, BattleshipView v, String networkRoleString, String ip, String port){
         view = v;
         model = m;
         this.networkRoleString = networkRoleString;
 
         //Create client or server object based on networkRoleString input
         if(networkRoleString.equalsIgnoreCase("server")) {
-            networkRole = new BattleshipServer(Integer.parseInt(ip));
+            networkRole = new BattleshipServer(ip, Integer.parseInt(port));
         }
         else if (networkRoleString.equalsIgnoreCase("client")) {
-            networkRole = new BattleshipClient(Integer.parseInt(ip));
+            networkRole = new BattleshipClient(ip, Integer.parseInt(port));
         }
 
         //Add listeners

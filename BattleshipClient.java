@@ -15,19 +15,19 @@ import java.io.IOException;
     // private PrintWriter out;
     // private BufferedReader in;
 
-    public  BattleshipClient(int port) {
+    public  BattleshipClient(String ip, int port) {
         try {
-            openConnection(port);
+            openConnection(ip, port);
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    public void openConnection(int port) throws IOException {
+    public void openConnection(String ip, int port) throws IOException {
         //THIS InetAddress.getLocalHost() could cause errors when connecting across the network
         System.out.println("Attempting to connect to server");
-        clientSocket = new Socket(InetAddress.getLocalHost(), port);
+        clientSocket = new Socket(InetAddress.getByName(ip), port);
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }

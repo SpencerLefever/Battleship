@@ -16,7 +16,7 @@ import java.io.IOException;
     public PrintWriter out;
     public BufferedReader in;
 
-    abstract void openConnection(int port) throws IOException;
+    abstract void openConnection(String ip, int port) throws IOException;
 
     abstract void sendData(String message) throws IOException;
 

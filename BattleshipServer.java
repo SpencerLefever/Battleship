@@ -16,16 +16,16 @@ import java.io.IOException;
     // public PrintWriter out;
     // public BufferedReader in;
 
-    public  BattleshipServer(int port) {
+    public  BattleshipServer(String ip, int port) {
         try {
-            openConnection(port);
+            openConnection(ip, port);
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    public void openConnection(int port) throws IOException {
+    public void openConnection(String ip, int port) throws IOException {
         System.out.println("Waiting for client to connect");
         serverSocket = new ServerSocket(port, 100);
         clientSocket = serverSocket.accept();
