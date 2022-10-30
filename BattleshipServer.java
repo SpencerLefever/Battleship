@@ -9,12 +9,12 @@ import java.io.IOException;
  * Network Role Interface Implemnted for Server Role
  */
 
- public class BattleshipServer implements NetworkRole {
+ public class BattleshipServer extends NetworkRole {
 
-    private ServerSocket serverSocket;
-    private Socket clientSocket;
-    private PrintWriter out;
-    private BufferedReader in;
+    // public ServerSocket serverSocket;
+    // public Socket clientSocket;
+    // public PrintWriter out;
+    // public BufferedReader in;
 
     public  BattleshipServer(int port) {
         try {

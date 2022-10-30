@@ -38,7 +38,7 @@ public class BattleshipController{
         view.addRestartListener(new RestartListener());
         view.addRandomListener(new RandomListener());
         view.addTargetGridListener(new TargetGridListener());
-        view.addOceanGridListener(new OceanGridListener());
+        //view.addOceanGridListener(new OceanGridListener());
         view.addShipSelectionListener(new ShipSelectionListener());
         // view.addTargetButtonListener(new TargetButtonListener());
         // view.addupdateGridListener(new updateGridListener());        
@@ -53,6 +53,8 @@ public class BattleshipController{
                         for(int j=0; j< 10; j++) {
                             if(view.targetGridButtonArr[i][j].isSelected())
                             {
+                                view.targetGridButtonArr[i][j].setSelected(false);
+                                view.targetGridButtonArr[i][j].setEnabled(false);
                                 //System.out.println("Button coordinate " + i + " " + j);
 
                                 //Populate message to send to opponent
@@ -68,16 +70,20 @@ public class BattleshipController{
                                 } catch (IOException err) {
                                     err.printStackTrace();
                                 }
-                                model.fire(i,j);
+                                //model.fire(i,j);
                             }
                         }
                 }
-                if(networkRoleString.equalsIgnoreCase("server")) {
-                    shotSentServer = true;
-                }
-                if(networkRoleString.equalsIgnoreCase("client")) {
-                    shotSentClient = true;
-                }
+
+            //Disable fire button after press until next turn
+            view.fireButton.setEnabled(false);
+
+            if(networkRoleString.equalsIgnoreCase("server")) {
+                shotSentServer = true;
+            }
+            if(networkRoleString.equalsIgnoreCase("client")) {
+                shotSentClient = true;
+            }
      }
  }
 
@@ -475,6 +481,9 @@ void playGameServer() {
     String resultMessage = "";
     String shotMessage = "";
 
+    //Enable fire button for next turn
+    view.fireButton.setEnabled(true);
+
     //1. Send shot data
     System.out.println("Waiting for for shot to be fired");
     while(!shotSentServer) {System.out.print("");} //Waiting for server to send a shot
@@ -491,8 +500,8 @@ void playGameServer() {
         //resultMessage = checkShot(networkRole.readData());
         networkRole.sendData(resultMessage);
         //view.gameLog.append(resultMessage);
-        updateOceanGridView();
-        updateTargetGridView();
+        // updateOceanGridView();
+        // updateTargetGridView();
     }
     catch (IOException e) {
         e.printStackTrace();
@@ -512,6 +521,7 @@ void playGameServer() {
     catch (IOException e) {
         e.printStackTrace();
     }
+    view.fireButton.setEnabled(true);
 
     //Reset boolean values for next turn
     shotSentServer = false;
@@ -533,6 +543,9 @@ void playGameClient() {
     String resultMessage = "";
     String shotMessage = "";
 
+    //Disable clients button until server send first shot
+    //view.fireButton.setEnabled(false);
+
     //1. Wait for opponent to send shot message
     System.out.println("Waiting for opponent shot message");
     while(!shotReceivedClient){shotMessage = waitForOpponentShotMessage();} //Waiting for shot message from server
@@ -544,12 +557,15 @@ void playGameClient() {
         System.out.println("Sending results to opponent " + resultMessage);
         networkRole.sendData(resultMessage);
         //view.gameLog.append(resultMessage);
-        updateOceanGridView();
-        updateTargetGridView();
+        // updateOceanGridView();
+        // updateTargetGridView();
     }
     catch (IOException e) {
         e.printStackTrace();
     }
+
+    //Enable fire button
+    view.fireButton.setEnabled(true);
 
     //3. Fire shot and send message to opponent
     System.out.println("Waiting for fire button to be pressed");
@@ -566,8 +582,8 @@ void playGameClient() {
         //resultMessage = checkShot(resultMessage);
         networkRole.sendData(resultMessage);
         //view.gameLog.append(resultMessage);
-        updateOceanGridView();
-        updateTargetGridView();
+        // updateOceanGridView();
+        // updateTargetGridView();
         //view.gameLog.append(resultMessage);
     }
     catch (IOException e) {
@@ -619,22 +635,40 @@ String waitForOpponentResultMessage() {
         String message = networkRole.readData();
         System.out.println("Inside wait for result message: " + message);
 
-        if(message.length() > 0) {
+        if(message.length() == 16) {
         
             //Check if message is the shot message
-            if(message.substring(10, 14).equalsIgnoreCase("HIT ") || message.substring(10, 14).equalsIgnoreCase("MISS")) {
-                System.out.println("Result Message Received!! " + message.substring(10, 14));
+            if(message.substring(12, 16).equalsIgnoreCase("HIT ") || message.substring(12, 16).equalsIgnoreCase("MISS")) {
+                String x = message.substring(10,11); 
+                // char xChar = x.charAt(0);
+                char[] xChar = x.toCharArray();
+                String y = message.substring(11, 12);
+
+                //int xCoord = (Integer.parseInt(xChar)) - 'A';
+                int xCoord = Integer.parseInt(x);
+
+                int yCoord = Integer.parseInt(y);
+
+                System.out.println("Result Message Received!! " + message.substring(12, 16));
 
                 //Append the result message to the chat log
                 view.gameLog.append(message);
 
+                if(message.substring(12, 16).equalsIgnoreCase("HIT ")) {
+                    model.p.targetGrid.setCell(xCoord, yCoord, model.p.SHOT_HIT);
+                }
+                if(message.substring(12, 16).equalsIgnoreCase("MISS")) {
+                    model.p.targetGrid.setCell(xCoord, yCoord, model.p.SHOT_MISS);
+                }
+
+                //Update boolean based on networkRoleString
                 if(networkRoleString.equalsIgnoreCase("server")) {
                     resultReceivedServer = true;
                 }
                 if(networkRoleString.equalsIgnoreCase("client")) {
                     resultReceivedClient = true;
                 }
-                return message.substring(10,14);
+                return message.substring(12,16);
             }
             
         }
@@ -646,10 +680,8 @@ String waitForOpponentResultMessage() {
 }
 
 
-//TODO REDO Parsing to reflect new message format and decode char
 String checkShot(String message) {
     String x = message.substring(4,5); 
-    // char xChar = x.charAt(0);
     char[] xChar = x.toCharArray();
     String y = message.substring(9, 10);
     String resultString;
@@ -663,12 +695,15 @@ String checkShot(String message) {
 
     if(model.p.shipGrid.getCell(xCoord, yCoord) == model.p.NO_SHIP) {
         System.out.println("Shot missed");
-       resultString = "MISS\n";
+        resultString = String.format("%d%d%s", xCoord, yCoord, "MISS\n");
+       //resultString = Integer.toString(yCoord) + "MISS\n";
+
        //model.p.shipGrid.setCell(xCoord, yCoord, model.p.SHIP_GOOD);
        return resultString;
     } else if (model.p.shipGrid.getCell(xCoord, yCoord) == model.p.SHIP_GOOD) {
         System.out.println("Shot hit");
-       resultString = "HIT \n";
+       //resultString = xCoord + yCoord + "HIT \n";
+       resultString = String.format("%d%d%s", xCoord, yCoord, "HIT \n");
        model.p.shipGrid.setCell(xCoord, yCoord, model.p.SHIP_HIT);
        return resultString;
     } else {

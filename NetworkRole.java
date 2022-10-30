@@ -1,4 +1,7 @@
+import java.net.*;
+import java.io.*;
 import java.io.IOException;
+
 
 /**
  * Spencer Lefever
@@ -7,13 +10,18 @@ import java.io.IOException;
  * Network role interface for client and server
  */
 
- public interface NetworkRole {
-    public void openConnection(int port) throws IOException;
+ public abstract class NetworkRole {
+    public ServerSocket serverSocket;
+    public Socket clientSocket;
+    public PrintWriter out;
+    public BufferedReader in;
 
-    public void sendData(String message) throws IOException;
+    abstract void openConnection(int port) throws IOException;
 
-    public String readData() throws IOException;
+    abstract void sendData(String message) throws IOException;
 
-    public void closeConnection() throws IOException;
+    abstract String readData() throws IOException;
+
+    abstract void closeConnection() throws IOException;
  }
 
