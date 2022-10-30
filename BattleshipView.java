@@ -14,11 +14,11 @@ public class BattleshipView extends JFrame {
         
         //Buttons to put along bottom of screen
         private JButton quitButton = new JButton("Quit");
-        private JButton confirmShipButton = new JButton("Confirm Ship");
+        public JButton confirmShipButton = new JButton("Confirm Ship");
         public JButton fireButton = new JButton("Fire");
         public JButton randomButton = new JButton("Randomize");
         public JButton confirmButton = new JButton("Confirm Grid");
-        private JButton confirmPlacementButton = new JButton("Confirm Placement");
+        public JButton confirmPlacementButton = new JButton("Confirm Placement");
         private JPanel buttonPanel;
 
         //JComponents related to the grids

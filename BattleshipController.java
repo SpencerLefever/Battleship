@@ -94,6 +94,12 @@ class ConfirmListener implements ActionListener{
         view.randomButton.setEnabled(false);
         view.confirmButton.setEnabled(false);
         view.fireButton.setEnabled(true);
+
+        for(int i = 0; i < 5; i++){
+            view.shipSelectionButtonArr[i].setEnabled(false);
+        }
+
+        view.confirmShipButton.setEnabled(false);
     }
 }
 
