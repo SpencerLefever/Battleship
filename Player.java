@@ -220,7 +220,7 @@
             //Check if ship head has neighbors
 
             //Check right left of head if head is not on edge
-            if(y>=1) {
+            if(y>=1 && y<9) {
                 if(sGrid[x][y-1] == SHIP_GOOD) {
                     return true;
                 }

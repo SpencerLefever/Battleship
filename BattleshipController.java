@@ -35,11 +35,12 @@ public class BattleshipController{
         //Add listeners
         view.addFireListener(new FireListener());
         view.addConfirmListener(new ConfirmListener());
-        view.addRestartListener(new RestartListener());
+        view.addConfirmShipListener(new ConfirmShipListener());
         view.addRandomListener(new RandomListener());
         view.addTargetGridListener(new TargetGridListener());
         //view.addOceanGridListener(new OceanGridListener());
         view.addShipSelectionListener(new ShipSelectionListener());
+        view.addOceanGridButtonListener(new OceanGridButtonListener());
         // view.addTargetButtonListener(new TargetButtonListener());
         // view.addupdateGridListener(new updateGridListener());        
         view.setVisible(true);
@@ -96,9 +97,42 @@ class ConfirmListener implements ActionListener{
     }
 }
 
-class RestartListener implements ActionListener{
+boolean cruiserPlaced = false;
+boolean battleshipPlaced = false;
+boolean submarinePlaced = false;
+boolean carrierPlaced = false;
+boolean destroyerPlaced = false;
+
+class ConfirmShipListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
-        System.out.println("Restarted");
+        for(int i = 0; i < 5; i++){
+            if(view.shipSelectionButtonArr[i].isSelected()){
+                view.shipSelectionButtonArr[i].setEnabled(false);
+            } else {
+                view.shipSelectionButtonArr[i].setEnabled(true);
+            }
+           
+        }
+
+        if(carrierPlaced) {
+                view.shipSelectionButtonArr[0].setEnabled(false);
+        }
+
+        if(battleshipPlaced) {
+                view.shipSelectionButtonArr[1].setEnabled(false);
+         }
+
+        if(cruiserPlaced) {
+                view.shipSelectionButtonArr[2].setEnabled(false);
+         }
+
+        if(submarinePlaced) {
+                view.shipSelectionButtonArr[3].setEnabled(false);
+         }
+
+        if(destroyerPlaced) {
+                view.shipSelectionButtonArr[4].setEnabled(false);
+         }
     }
 }
 
@@ -107,90 +141,193 @@ class RandomListener implements ActionListener {
         clearShipPlacement();
         model.p.setGridRand();
         updateOceanGridView();
-    }
-}
 
-class ShipSelectionListener implements ItemListener {
-    public void itemStateChanged(ItemEvent e){
-        Object selected = e.getItem();
-        
-        switch(selected.toString()){
-            case "Carrier":
-                currentShip = "Carrier";
-                if(e.getStateChange() == ItemEvent.SELECTED){
-                    System.out.println("Carrier");
-                    view.shipLabel.setLayout(new GridLayout(5,1,view.buttonSpacer,view.buttonSpacer));
-                    initShipButtonArr(5);
-                }
-
-                   if(e.getStateChange() == ItemEvent.DESELECTED){
-                    view.shipLabel.removeAll();
-                }
-                
-                break;
-
-            case "Battleship":
-           // System.out.println("Battleship");
-                currentShip = "Battleship";
-                if(e.getStateChange() == ItemEvent.SELECTED){
-                    System.out.println("Battleship");
-                    view.shipLabel.setLayout(new GridLayout(4,1,view.buttonSpacer,view.buttonSpacer));
-                    initShipButtonArr(4);
-                }
-
-                if(e.getStateChange() == ItemEvent.DESELECTED){
-                    System.out.println("Battleship deselected");
-                    view.shipLabel.removeAll();
-                }
-
-                break;
-
-            case "Cruiser":
-                currentShip = "Cruiser";
-            //System.out.println("Carrier");
-                if(e.getStateChange() == ItemEvent.SELECTED){
-                    view.shipLabel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
-                    initShipButtonArr(3);
-                }
-
-                   if(e.getStateChange() == ItemEvent.DESELECTED){
-                    view.shipLabel.removeAll();
-                }
-
-                break;
-
-            case "Submarine":
-                currentShip = "Submarine";
-                if(e.getStateChange() == ItemEvent.SELECTED){
-                    view.shipLabel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
-                    initShipButtonArr(3);
-                }
-
-                   if(e.getStateChange() == ItemEvent.DESELECTED){
-                    view.shipLabel.removeAll();
-                }
-
-                break;
-
-            case "Destroyer":
-                currentShip = "Destroyer";
-                if(e.getStateChange() == ItemEvent.SELECTED){
-                    view.shipLabel.setLayout(new GridLayout(2,1,view.buttonSpacer,view.buttonSpacer));
-                    initShipButtonArr(2);
-                }
-
-                   if(e.getStateChange() == ItemEvent.DESELECTED){
-                    view.shipLabel.removeAll();
-                }
-
-                break;
-
-            default:
+        for(int i = 0; i < 5; i++){
+            view.shipSelectionButtonArr[i].setEnabled(false);
         }
-
-        
     }
 }
+
+class ShipSelectionListener implements ActionListener {
+    public void actionPerformed(ActionEvent e){
+        JTextField shipTextField;
+        view.shipButtonArrPanel.removeAll();
+        for(int i = 0; i < 5; i++){
+            if(view.shipSelectionButtonArr[i].isSelected()){
+                switch(i){
+                    case 0:
+                    // Carrier
+                    shipTextField = new JTextField("Carrier");
+                    shipTextField.setEditable(false);
+                    view.shipButtonArrPanel.setLayout(new GridLayout(6,1,view.buttonSpacer,view.buttonSpacer));
+                    view.shipButtonArrPanel.add(shipTextField);
+                    initShipButtonArr(5);
+                    currentShip = "Carrier";
+
+                    
+
+                    break;
+
+                    case 1:
+
+                    // Battleship
+                    shipTextField = new JTextField("Battleship");
+                    shipTextField.setEditable(false);
+                    view.shipButtonArrPanel.setLayout(new GridLayout(5,1,view.buttonSpacer,view.buttonSpacer));
+                    view.shipButtonArrPanel.add(shipTextField);
+                    initShipButtonArr(4);
+                    currentShip = "Battleship";
+
+
+                    break;
+
+                    case 2:
+
+                    // Cruiser
+                    shipTextField = new JTextField("Cruiser");
+                    shipTextField.setEditable(false);
+                    view.shipButtonArrPanel.setLayout(new GridLayout(4,1,view.buttonSpacer,view.buttonSpacer));
+                    view.shipButtonArrPanel.add(shipTextField);
+                    initShipButtonArr(3);
+                    currentShip = "Cruiser";
+
+                    break;
+
+                    case 3:
+
+                    // Submarine
+                    shipTextField = new JTextField("Submarine");
+                    shipTextField.setEditable(false);
+                    view.shipButtonArrPanel.setLayout(new GridLayout(4,1,view.buttonSpacer,view.buttonSpacer));
+                    view.shipButtonArrPanel.add(shipTextField);
+                    initShipButtonArr(3);
+                    currentShip = "Submarine";
+
+                    break;
+
+                    case 4:
+
+                    // Destroyer
+                    shipTextField = new JTextField("Destroyer");
+                    shipTextField.setEditable(false);
+                    view.shipButtonArrPanel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
+                    view.shipButtonArrPanel.add(shipTextField);
+                    initShipButtonArr(2);
+                    currentShip = "Destroyer";
+
+                    break;
+
+                    default:
+
+
+                
+
+                
+                }
+
+                //view.shipSelectionButtonArr[i].setEnabled(false);
+            } else {
+                view.shipSelectionButtonArr[i].setEnabled(false);
+            }
+        }
+    }
+}
+
+
+// class ShipSelectionListener implements ActionListener {
+//     public void actionPerformed(ActionEvent e){
+//         Object selected = view.shipSelection.getSelectedItem();
+        
+//         switch(selected.toString()){
+//             case "Carrier":
+//                 currentShip = "Carrier";
+//                 System.out.println(currentShip);
+//                 /*
+//                 if(e.getStateChange() == ItemEvent.SELECTED){
+//                     //System.out.println("Carrier");
+//                     view.shipLabel.setLayout(new GridLayout(5,1,view.buttonSpacer,view.buttonSpacer));
+//                     initShipButtonArr(5);
+//                 }
+
+//                    if(e.getStateChange() == ItemEvent.DESELECTED){
+//                     view.shipLabel.removeAll();
+//                 }
+//                 */
+                
+//                 break;
+
+//             case "Battleship":
+//            // System.out.println("Battleship");
+//                 currentShip = "Battleship";
+//                 System.out.println(currentShip);
+//                 /*
+//                 if(e.getStateChange() == ItemEvent.SELECTED){
+//                     //System.out.println("Battleship");
+//                     view.shipLabel.setLayout(new GridLayout(4,1,view.buttonSpacer,view.buttonSpacer));
+//                     initShipButtonArr(4);
+//                 }
+
+//                 if(e.getStateChange() == ItemEvent.DESELECTED){
+//                     System.out.println("Battleship deselected");
+//                     view.shipLabel.removeAll();
+//                 }
+//                 */
+
+//                 break;
+
+//             case "Cruiser":
+//                 currentShip = "Cruiser";
+//             //System.out.println("Carrier");
+//                 /*
+//                 if(e.getStateChange() == ItemEvent.SELECTED){
+//                     view.shipLabel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
+//                     initShipButtonArr(3);
+//                 }
+
+//                    if(e.getStateChange() == ItemEvent.DESELECTED){
+//                     view.shipLabel.removeAll();
+//                 }
+//                 */
+
+//                 break;
+
+//             case "Submarine":
+//                 currentShip = "Submarine";
+//                 /*
+//                 if(e.getStateChange() == ItemEvent.SELECTED){
+//                     view.shipLabel.setLayout(new GridLayout(3,1,view.buttonSpacer,view.buttonSpacer));
+//                     initShipButtonArr(3);
+//                 }
+
+//                    if(e.getStateChange() == ItemEvent.DESELECTED){
+//                     view.shipLabel.removeAll();
+//                 }
+//                 */
+
+//                 break;
+
+//             case "Destroyer":
+//                 currentShip = "Destroyer";
+//                 /*
+//                 if(e.getStateChange() == ItemEvent.SELECTED){
+//                     view.shipLabel.setLayout(new GridLayout(2,1,view.buttonSpacer,view.buttonSpacer));
+//                     initShipButtonArr(2);
+//                 }
+
+//                    if(e.getStateChange() == ItemEvent.DESELECTED){
+//                     view.shipLabel.removeAll();
+//                 }
+//                 */
+
+//                 break;
+
+//             default:
+//         }
+
+        
+//     }
+// }
+
 
 
 
@@ -265,41 +402,138 @@ class OceanGridListener implements DocumentListener {
 
 class OceanGridButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e){
+        Ship newShip;
         for(int i = 0; i < 10; i++){
-            for(int j = 0; i < 10; j++){
+            for(int j = 0; j < 10; j++){
                 if(view.oceanGridButtonArr[i][j].isSelected()){
+                    System.out.println(i + " " + j);
                     switch(currentShip){
                         case "Carrier":
-                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[0]);
-                            updateOceanGridView();
-                        
+                            //If ship has not been placed
+                            if(model.p.shipArr[0].getxLocation() == -1) {
+                                newShip = new Ship(5, "Carrier", false, i, j, true);
+                                model.p.shipArr[0] = newShip;
+                                if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[0])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[0]);
+                                }
+                                updateOceanGridView();
+                            } else { //Ship has already been placed
+                                clearCurrentShip(model.p.shipArr[0]);
+                                model.p.shipArr[0].setxLocation(i);
+                                model.p.shipArr[0].setyLocation(j);
+                                System.out.println("Replacing ship");
+                                 if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[0])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[0]);
+                                }
+                                updateOceanGridView();
+                                model.p.shipGrid.printGrid();
+                            }
+                            carrierPlaced = true;
+
                         break;
 
                         case "Battleship":
-                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[1]);
-                            updateOceanGridView();
+                                   //If ship has not been placed
+                            if(model.p.shipArr[1].getxLocation() == -1) {
+                                newShip = new Ship(4, "Battleship", false, i, j, true);
+                                model.p.shipArr[1] = newShip;
+                                if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[1])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[1]);
+                                }
+                                updateOceanGridView();
+                            } else { //Ship has already been placed
+                                clearCurrentShip(model.p.shipArr[1]);
+                                model.p.shipArr[1].setxLocation(i);
+                                model.p.shipArr[1].setyLocation(j);
+                                System.out.println("Replacing ship");
+                                 if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[1])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[1]);
+                                }
+                                updateOceanGridView();
+                                model.p.shipGrid.printGrid();
+                            }
+
+                            battleshipPlaced = true;
+
 
                         break;
                         
                         case "Cruiser":
-                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[2]);
-                            updateOceanGridView();
+                                   //If ship has not been placed
+                            if(model.p.shipArr[2].getxLocation() == -1) {
+                                newShip = new Ship(3, "Cruiser", false, i, j, true);
+                                model.p.shipArr[2] = newShip;
+                                if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[2])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[2]);
+                                }
+                                updateOceanGridView();
+                            } else { //Ship has already been placed
+                                clearCurrentShip(model.p.shipArr[2]);
+                                model.p.shipArr[2].setxLocation(i);
+                                model.p.shipArr[2].setyLocation(j);
+                                System.out.println("Replacing ship");
+                                 if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[2])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[2]);
+                                }
+                                updateOceanGridView();
+                                model.p.shipGrid.printGrid();
+                            }
+
+                            cruiserPlaced = true;
 
                         break;
 
                         case "Submarine":
-                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[3]);
-                            updateOceanGridView();
+                                     //If ship has not been placed
+                            if(model.p.shipArr[3].getxLocation() == -1) {
+                                newShip = new Ship(3, "Submarine", false, i, j, true);
+                                model.p.shipArr[3] = newShip;
+                                if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[3])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[3]);
+                                }
+                                updateOceanGridView();
+                            } else { //Ship has already been placed
+                                clearCurrentShip(model.p.shipArr[3]);
+                                model.p.shipArr[3].setxLocation(i);
+                                model.p.shipArr[3].setyLocation(j);
+                                System.out.println("Replacing ship");
+                                 if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[3])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[3]);
+                                }
+                                updateOceanGridView();
+                                model.p.shipGrid.printGrid();
+                            }
+
+                            submarinePlaced = true;
 
                         break;
 
                         case "Destroyer":
-                            model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[1]);
-                            updateOceanGridView();
+                                    //If ship has not been placed
+                            if(model.p.shipArr[4].getxLocation() == -1) {
+                                newShip = new Ship(2, "Destroyer", false, i, j, true);
+                                model.p.shipArr[4] = newShip;
+                                if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[4])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[4]);
+                                }
+                                updateOceanGridView();
+                            } else { //Ship has already been placed
+                                clearCurrentShip(model.p.shipArr[4]);
+                                model.p.shipArr[4].setxLocation(i);
+                                model.p.shipArr[4].setyLocation(j);
+                                System.out.println("Replacing ship");
+                                 if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[4])){
+                                model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[4]);
+                                }
+                                updateOceanGridView();
+                                model.p.shipGrid.printGrid();
+                            }
+
+                            destroyerPlaced = true;
 
                         break;
 
-                        default:
+                        default: 
 
                     }
                             
@@ -312,8 +546,23 @@ class OceanGridButtonListener implements ActionListener {
         }
     }
 
-
-
+    public void clearCurrentShip(Ship s){
+        // Vertical orientation
+        if(s.getOrientation()){
+            for(int i = 0; i < s.getSize(); i++){
+                if((s.getxLocation() + i) < 9 && (model.p.shipGrid.getCell(s.getxLocation() + i, s.getyLocation()) != model.p.SHIP_GOOD)){
+                    model.p.shipGrid.clearCell(s.getxLocation() + i, s.getyLocation());
+                }
+            }
+        } else {
+            for(int i = 0; i < s.getSize(); i++){
+                if((s.getyLocation() + i) < 9 && (model.p.shipGrid.getCell(s.getxLocation(), s.getyLocation() + i) != model.p.SHIP_GOOD)){
+                    model.p.shipGrid.clearCell(s.getxLocation(), s.getyLocation() + i);
+                }
+            }
+        }
+    }
+ 
 
 /*
 class TargetButtonListener implements ActionListener{
@@ -348,8 +597,9 @@ public void initShipButtonArr(int shipSize){
     for(int i = 0; i < shipSize; i++){
         shipButtonArr[i] = new JButton();
         shipButtonArr[i].setMaximumSize(new Dimension(10, 10));
-
-        view.shipLabel.add(shipButtonArr[i]);
+        //shipButtonArr[i].setVisible(true);
+        view.shipButtonArrPanel.add(shipButtonArr[i]);
+        view.shipSelectionPanel.validate();
     }
 }
 
@@ -357,8 +607,8 @@ public void clearShipPlacement(){
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
                 if(model.p.shipGrid.getCell(i, j) == model.p.SHIP_GOOD){
-                    model.p.shipGrid.clearCell(i,j);
-                    view.oceanGridButtonArr[i][j].setBackground(null);
+                    model.p.shipGrid.setCell(i,j, model.p.NO_SHIP);
+                    //view.oceanGridButtonArr[i][j].setBackground(null);
                 }
             }
         }

@@ -14,10 +14,10 @@ public class BattleshipView extends JFrame {
         
         //Buttons to put along bottom of screen
         private JButton quitButton = new JButton("Quit");
-        private JButton restartButton = new JButton("Restart");
+        private JButton confirmShipButton = new JButton("Confirm Ship");
         public JButton fireButton = new JButton("Fire");
         public JButton randomButton = new JButton("Randomize");
-        public JButton confirmButton = new JButton("Confirm");
+        public JButton confirmButton = new JButton("Confirm Grid");
         private JButton confirmPlacementButton = new JButton("Confirm Placement");
         private JPanel buttonPanel;
 
@@ -25,7 +25,7 @@ public class BattleshipView extends JFrame {
         private JPanel oceanGrid = new JPanel();
         private JPanel targetGrid = new JPanel();
         private JPanel gridPanel;
-        public JButton [][] oceanGridButtonArr = new JButton[GRID_LENGTH][GRID_WIDTH];
+        public JToggleButton [][] oceanGridButtonArr = new JToggleButton[GRID_LENGTH][GRID_WIDTH];
         public JToggleButton [][] targetGridButtonArr = new JToggleButton[GRID_LENGTH][GRID_WIDTH];
         public ButtonGroup targetGridButtonGroup;
         public ButtonGroup oceanGridButtonGroup;
@@ -37,10 +37,12 @@ public class BattleshipView extends JFrame {
 
         //JComponents related to ship selection panel
         private JPanel shipContainer = new JPanel();
-        private JPanel shipSelectionPanel = new JPanel();
-        public JComboBox<String> shipSelection;
+        public JPanel shipSelectionPanel = new JPanel();
+       // public JComboBox<String> shipSelection;
+        public JRadioButton [] shipSelectionButtonArr = new JRadioButton[5];
+        public ButtonGroup shipSelectionButtonGroup;
         private ImageIcon shipIcon;
-        public JLabel shipLabel;
+        public JPanel shipButtonArrPanel;
 
         //JComponents related to header
         private JPanel headerPanel;
@@ -145,31 +147,51 @@ public class BattleshipView extends JFrame {
         void initShipSelectionPanel() {
             //Initialize JComboBox and values
             String[] shipList = {"Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
-            shipSelection = new JComboBox<String>(shipList);
+            //shipSelection = new JComboBox<String>(shipList);
+            shipContainer.setLayout(new GridLayout(5, 1, 5, 5));
+            shipButtonArrPanel = new JPanel();
 
-            shipSelection.setVisible(true);
+            for(int i = 0; i < 5; i++){
+                shipSelectionButtonArr[i] = new JRadioButton(shipList[i]);
+                shipSelectionButtonArr[i].setVerticalTextPosition(SwingConstants.TOP);
+                shipSelectionButtonArr[i].setVisible(true);
+                shipContainer.add(shipSelectionButtonArr[i]);
+            }
+
+            initShipSelectionButtonGroup();
+
+            //shipSelection.setVisible(true);
 
             // //Initialize ImageIcon to null value
             // shipIcon = new ImageIcon("src/battleship.png");
             
-            shipLabel = new JLabel();
-            shipLabel.setVisible(true);
+            //shipLabel = new JLabel();
+            //shipLabel.setVisible(true);
             //shipLabel.setLayout(new FlowLayout());
 
             //Set layout for shipSelectionPanel
             shipSelectionPanel.setLayout(new GridLayout(2,1,25,25));
 
+            shipButtonArrPanel.setVisible(true);
             //Add ship combo box and icon to the Ship selection panel
-            shipSelectionPanel.add(shipSelection);
-            shipSelectionPanel.add(shipLabel);
+            shipSelectionPanel.add(shipContainer);
+            shipSelectionPanel.add(shipButtonArrPanel);
 
+        }
+
+        void initShipSelectionButtonGroup(){
+            shipSelectionButtonGroup = new ButtonGroup();
+
+            for(int i = 0; i < 5; i++){
+                shipSelectionButtonGroup.add(shipSelectionButtonArr[i]);
+            }
         }
 
         void initOceanGridButtonArr() {
             //Initialize oceanGridButtonArr
                 for(int i = 0; i < GRID_LENGTH; i++) {
                         for(int j=0; j< GRID_WIDTH; j++) {
-                                oceanGridButtonArr[i][j] = new JButton();
+                                oceanGridButtonArr[i][j] = new JToggleButton();
                                 oceanGridButtonArr[i][j].setPreferredSize(new Dimension(10,10));
                         }
                 }  
@@ -306,7 +328,7 @@ public class BattleshipView extends JFrame {
             buttonPanel.setLayout(new GridLayout(1,3,25,25));
             buttonPanel.add(fireButton);
             buttonPanel.add(confirmButton);
-            buttonPanel.add(restartButton);               // for(int i = 0; i < 10; i++) {
+            buttonPanel.add(confirmShipButton);               // for(int i = 0; i < 10; i++) {
                       //  for(int j=0; j< 10; j++) {
                     //            targetGridButtonArr[i][j].addActionListener(t);
                   //      }
@@ -324,17 +346,21 @@ public class BattleshipView extends JFrame {
                 confirmButton.addActionListener(c);
          }
 
-         void addRestartListener(ActionListener r){
-                restartButton.addActionListener(r);
+         void addConfirmShipListener(ActionListener r){
+                confirmShipButton.addActionListener(r);
          }
 
          void addRandomListener(ActionListener r){
                 randomButton.addActionListener(r);
          }
 
-         void addShipSelectionListener(ItemListener s){
-                shipSelection.addItemListener(s);
+        
+         void addShipSelectionListener(ActionListener s){
+                for(int i = 0; i < 5; i++){
+                    shipSelectionButtonArr[i].addActionListener(s);
+                }
          }
+         
 
 
          //TODO Figure out how to update grid after player sends a shot back
@@ -355,6 +381,14 @@ public class BattleshipView extends JFrame {
                                 oceanGridButtonArr[i][j].addActionListener(u);
                         }
                 }
+         }
+
+         void addOceanGridButtonListener(ActionListener o){
+            for(int i = 0; i < 10; i++){
+                for(int j = 0; j < 10; j++){
+                    oceanGridButtonArr[i][j].addActionListener(o);
+                }
+            }
          }
 
         //  void addTargetButtonListener(ActionListener t) {
