@@ -28,6 +28,9 @@ import java.io.IOException;
     public void openConnection(String ip, int port) throws IOException {
         System.out.println("Waiting for client to connect");
         serverSocket = new ServerSocket(port, 100);
+
+        System.out.println(InetAddress.getLocalHost().getHostAddress());
+
         clientSocket = serverSocket.accept();
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

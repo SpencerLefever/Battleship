@@ -46,6 +46,7 @@ public class BattleshipController{
         //view.addOceanGridListener(new OceanGridListener());
         view.addShipSelectionListener(new ShipSelectionListener());
         view.addOceanGridButtonListener(new OceanGridButtonListener());
+        view.addRotateShipButtonListener(new RotateShipButtonListener());
         // view.addTargetButtonListener(new TargetButtonListener());
         // view.addupdateGridListener(new updateGridListener());        
         view.setVisible(true);
@@ -111,6 +112,7 @@ class ConfirmListener implements ActionListener{
 
 class ConfirmShipListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
+
         for(int i = 0; i < 5; i++){
             if(view.shipSelectionButtonArr[i].isSelected()){
                 view.shipSelectionButtonArr[i].setEnabled(false);
@@ -167,6 +169,84 @@ class RandomListener implements ActionListener {
         }
 
         view.confirmShipButton.setEnabled(false);
+    }
+}
+
+class RotateShipButtonListener implements ActionListener {
+
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Rotate");
+        switch(currentShip) {
+            case "Carrier":
+                clearCurrentShip(model.p.shipArr[0]);
+                if(model.p.shipArr[0].getOrientation()) {
+                    model.p.shipArr[0].setOrientation(false);
+                }
+                else {
+                    model.p.shipArr[0].setOrientation(true);
+                }
+                updateOceanGridView();
+
+
+            break;
+
+            case "Battleship":
+                clearCurrentShip(model.p.shipArr[1]);
+
+                if(model.p.shipArr[1].getOrientation()) {
+                    model.p.shipArr[1].setOrientation(false);
+                }
+                else {
+                    model.p.shipArr[1].setOrientation(true);
+                }
+                updateOceanGridView();
+
+
+            break;
+
+            case "Cruiser":
+                clearCurrentShip(model.p.shipArr[2]);
+
+                if(model.p.shipArr[2].getOrientation()) {
+                    model.p.shipArr[2].setOrientation(false);
+                }
+                else {
+                    model.p.shipArr[2].setOrientation(true);
+                }
+                updateOceanGridView();
+
+            break;
+
+            case "Submarine":
+                clearCurrentShip(model.p.shipArr[3]);
+
+                if(model.p.shipArr[3].getOrientation()) {
+                    model.p.shipArr[3].setOrientation(false);
+                }
+                else {
+                    model.p.shipArr[3].setOrientation(true);
+                }
+                updateOceanGridView();
+
+
+            break;
+
+            case "Destroyer":
+                clearCurrentShip(model.p.shipArr[4]);
+
+                if(model.p.shipArr[4].getOrientation()) {
+                    model.p.shipArr[4].setOrientation(false);
+                }
+                else {
+                    model.p.shipArr[4].setOrientation(true);
+                }
+                updateOceanGridView();
+
+            break;
+
+            default:
+
+        }
     }
 }
 
@@ -424,6 +504,9 @@ class OceanGridListener implements DocumentListener {
 
 class OceanGridButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e){
+        view.rotateShipButton.setEnabled(true);
+        view.confirmShipButton.setEnabled(true);
+
         Ship newShip;
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
@@ -443,6 +526,7 @@ class OceanGridButtonListener implements ActionListener {
                                 clearCurrentShip(model.p.shipArr[0]);
                                 model.p.shipArr[0].setxLocation(i);
                                 model.p.shipArr[0].setyLocation(j);
+                                System.out.println(model.p.shipArr[0].getOrientation());
                                 System.out.println("Replacing ship");
                                  if(!model.p.checkOverlap(model.p.shipGrid.getGrid(), model.p.shipArr[0])){
                                 model.p.setShip(model.p.shipGrid.getGrid(), model.p.shipArr[0]);
@@ -570,16 +654,17 @@ class OceanGridButtonListener implements ActionListener {
 
     public void clearCurrentShip(Ship s){
         // Vertical orientation
+        System.out.println("Orientation in clear current ship: " + s.getOrientation());
         if(s.getOrientation()){
             for(int i = 0; i < s.getSize(); i++){
-                if((s.getxLocation() + i) < 9 && (model.p.shipGrid.getCell(s.getxLocation() + i, s.getyLocation()) != model.p.SHIP_GOOD)){
-                    model.p.shipGrid.clearCell(s.getxLocation() + i, s.getyLocation());
+                if((s.getxLocation() + i) < 9){ //&& (model.p.shipGrid.getCell(s.getxLocation() + i, s.getyLocation()) != model.p.SHIP_GOOD)){
+                    model.p.shipGrid.setCell(s.getxLocation() + i, s.getyLocation(), model.p.NO_SHIP);
                 }
             }
         } else {
             for(int i = 0; i < s.getSize(); i++){
-                if((s.getyLocation() + i) < 9 && (model.p.shipGrid.getCell(s.getxLocation(), s.getyLocation() + i) != model.p.SHIP_GOOD)){
-                    model.p.shipGrid.clearCell(s.getxLocation(), s.getyLocation() + i);
+                if((s.getyLocation() + i) < 9){ //&& (model.p.shipGrid.getCell(s.getxLocation(), s.getyLocation() + i) != model.p.SHIP_GOOD)){
+                    model.p.shipGrid.setCell(s.getxLocation(), s.getyLocation() + i, model.p.NO_SHIP);
                 }
             }
         }

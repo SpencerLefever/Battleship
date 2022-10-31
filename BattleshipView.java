@@ -18,8 +18,8 @@ public class BattleshipView extends JFrame {
         public JButton fireButton = new JButton("Fire");
         public JButton randomButton = new JButton("Randomize");
         public JButton confirmButton = new JButton("Confirm Grid");
-        //public JButton confirmPlacementButton = new JButton("Confirm Placement");
         private JPanel buttonPanel;
+        public JButton rotateShipButton = new JButton("Rotate Ship");
 
         //JComponents related to the grids
         private JPanel oceanGrid = new JPanel();
@@ -38,7 +38,6 @@ public class BattleshipView extends JFrame {
         //JComponents related to ship selection panel
         private JPanel shipContainer = new JPanel();
         public JPanel shipSelectionPanel = new JPanel();
-       // public JComboBox<String> shipSelection;
         public JRadioButton [] shipSelectionButtonArr = new JRadioButton[5];
         public ButtonGroup shipSelectionButtonGroup;
         private ImageIcon shipIcon;
@@ -159,15 +158,6 @@ public class BattleshipView extends JFrame {
             }
 
             initShipSelectionButtonGroup();
-
-            //shipSelection.setVisible(true);
-
-            // //Initialize ImageIcon to null value
-            // shipIcon = new ImageIcon("src/battleship.png");
-            
-            //shipLabel = new JLabel();
-            //shipLabel.setVisible(true);
-            //shipLabel.setLayout(new FlowLayout());
 
             //Set layout for shipSelectionPanel
             shipSelectionPanel.setLayout(new GridLayout(2,1,25,25));
@@ -324,19 +314,21 @@ public class BattleshipView extends JFrame {
                 
             fireButton.setEnabled(false);
             confirmButton.setEnabled(false);
+            confirmShipButton.setEnabled(false);
+            rotateShipButton.setEnabled(false);
                 
             //Add components to button panel
-            buttonPanel.setLayout(new GridLayout(1,3,25,25));
+            buttonPanel.setLayout(new GridLayout(1,5,25,25));
             buttonPanel.add(fireButton);
             buttonPanel.add(confirmButton);
-            buttonPanel.add(confirmShipButton);               // for(int i = 0; i < 10; i++) {
+            buttonPanel.add(confirmShipButton);
+            buttonPanel.add(rotateShipButton);              
+            // for(int i = 0; i < 10; i++) {
                       //  for(int j=0; j< 10; j++) {
                     //            targetGridButtonArr[i][j].addActionListener(t);
                   //      }
                 //}
-            buttonPanel.add(randomButton);
-            //buttonPanel.add(confirmPlacementButton);
-        
+            buttonPanel.add(randomButton);        
         }
 
         void addFireListener(ActionListener f){
@@ -353,6 +345,10 @@ public class BattleshipView extends JFrame {
 
          void addRandomListener(ActionListener r){
                 randomButton.addActionListener(r);
+         }
+
+         void addRotateShipButtonListener(ActionListener a) {
+                rotateShipButton.addActionListener(a);
          }
 
         
@@ -391,6 +387,8 @@ public class BattleshipView extends JFrame {
                 }
             }
          }
+
+         
 
         //  void addTargetButtonListener(ActionListener t) {
         //         for(int i = 0; i < 10; i++) {
